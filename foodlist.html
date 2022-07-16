@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script type="text/javascript" src="assets/js/databaseurl.js"></script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="assets/images/eclogo.jpeg"/>
+  <title>Food list</title>
+
+  <!-- Styles -->
+  <link href="assets/css/lib/font-awesome.min.css" rel="stylesheet">
+  <link href="assets/css/lib/menubar/sidebar.css" rel="stylesheet">
+  <link href="assets/css/lib/bootstrap.min.css" rel="stylesheet">
+
+  <link href="assets/css/lib/helper.css" rel="stylesheet">
+  <link href="assets/css/style.css" rel="stylesheet">
+
+  <style>
+    button:hover{
+      background-color:black;
+      color:white;
+    }
+
+    button{
+      color:black;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="sidebar sidebar-hide-to-small sidebar-shrink sidebar-gestures">
+    <div class="nano">
+      <div class="nano-content">
+        <div class="logo"><span> <img src="assets/images/eclogo.jpeg" width="250px" height="250px"></span>
+          
+            <!-- <img src="assets/images/logo.png" alt="" /> -->
+            <span>Healthy Diet</span>
+        </div>
+        <ul>
+          <li class="label">Apps</li>
+              <li>
+                <a href="foodtable.html"><i class="ti-angle-right"></i>Calculate food calorie</a>
+              </li>
+              <li>
+                <a href="addusercalorie.html"><i class="ti-angle-right"></i>Calculate daily calorie</a>
+              </li>
+              <li>
+                <a href="Calorieshistory.html"><i class="ti-angle-right"></i>View calories history</a>
+              </li>
+              <li>
+                <a href="selectexercise.html"><i class="ti-angle-right"></i>View amount of exercise</a>
+              </li>
+              <li>
+                <a href="calculateBMI.html"><i class="ti-angle-right"></i>Calculate BMI</a>
+              </li>
+              <li>
+                <a href="BMI_history.html"><i class="ti-angle-right"></i>BMI Record</a>
+              </li>
+          <li>
+            <a href="app-profile.html">
+              <i class="ti-user"></i> Profile</a>
+          </li>
+          <li class="label">Features</li>
+          <li>
+            <a href="page-reset-password_f.html">
+              <i class="ti-target"></i> Reset password
+            </a>
+          </li>
+          <li>
+            <a  onclick="logout()">
+              <i class="ti-close"></i> Logout</a>
+          </li>
+        </ul></div></div></div>
+  <!-- /# sidebar -->
+  <div class="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="float-left">
+            <div class="hamburger sidebar-toggle">
+              <span class="line"></span>
+              <span class="line"></span>
+              <span class="line"></span>
+            </div>
+          </div>
+          <div class="float-right">
+              <div class="header-icon" >
+                <a href="app-profile.html">
+                <span class="user-avatar" id="avatarname">
+                  <i class="ti-angle-down f-s-10"></i></a>
+                </span>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="content-wrap">
+    <div class="card nestable-cart">
+    <h2 style="margin-left:30px">Add Food</h2>
+    <text id="text"></text><br>
+    <ln>
+    <input id="input"></input>
+    <button id="button"></button>
+    <button id="return"></button>
+    </ln>
+      <br>
+      <ln>
+    <button id="all">ALL</button>
+    <button id="meat">Meat</button>
+    <button id="carbo">Carbohydrate</button>
+    <button id="vege">Vegetable</button>
+  </ln>
+    <table id="table"></table>
+  </div></div>
+  
+    <script type="module">
+      
+        //check session timeout
+    if(localStorage.getItem("calorieusername"))
+    { var currenttime=new Date().getTime();
+      var checkexpire=JSON.parse(localStorage.getItem("calorieusername"));
+      if(currenttime-checkexpire.time>=checkexpire.expire)
+      {
+        alert("session timeout");
+        localStorage.removeItem("calorieusername");
+        window.location.href="page-login_f.html";
+      }
+    }
+    else{
+      window.location.href="page-login_f.html";
+    }
+
+    var username=JSON.parse(localStorage.getItem("calorieusername")).value;
+
+        document.getElementById("avatarname").innerHTML=username;
+
+  class food{
+    constructor(no,name,cpg,category){
+      this.no=no
+        this.name=name;
+        this.cpg=cpg;
+        this.category=category;
+
+    }
+    displayname(){
+        return this,name;
+    }
+
+    displaycpg(){
+        return this.cpg;
+    }
+}
+
+var foodarray=new Array(food);
+foodarray.push(new food(1,"Chicken",2.19,"m"));
+foodarray.push(new food(2,"Beef",2.48,"m"));
+foodarray.push(new food(3,"Eel",2.36,"m"));
+foodarray.push(new food(4,"Alligator",2.32,"m"));
+foodarray.push(new food(5,"Duck",3.37,"m"));
+foodarray.push(new food(6,"Turkey",1.89,"m"));
+foodarray.push(new food(7,"Carp",1.62,"m"));
+foodarray.push(new food(8,"Lobster",0.89,"m"));
+foodarray.push(new food(9,"Salmon",2.06,"m"));
+foodarray.push(new food(10,"Biscuit",2.69,"c"));
+foodarray.push(new food(11,"Bun",3.16,"c"));
+foodarray.push(new food(12,"Roti",2.64,"c"));
+foodarray.push(new food(13,"White Bread",2.65,"c"));
+foodarray.push(new food(14,"Rice",1.4,"c"));
+foodarray.push(new food(15,"Pasta",1.1,"c"));
+foodarray.push(new food(16,"Noodle",0.7,"c"));
+foodarray.push(new food(17,"Potato",0.7,"c"));
+foodarray.push(new food(18,"Crab",1.1,"m"));
+foodarray.push(new food(19,"Prawn",1.0,"m"));
+foodarray.push(new food(20,"Tuna",1.0,"m"));
+foodarray.push(new food(21,"Broccoli",0.32,"v"));
+foodarray.push(new food(22,"Cabbage",0.20,"v"));
+foodarray.push(new food(23,"Carrot",0.25,"v"));
+foodarray.push(new food(24,"Cauliflower",0.30,"v"));
+foodarray.push(new food(25,"Celery",0.10,"v"));
+foodarray.push(new food(26,"Cucumber",0.10,"v"));
+foodarray.push(new food(27,"Leek",0.20,"v"));
+foodarray.push(new food(28,"Lettuce",0.15,"v"));
+foodarray.push(new food(28,"Mushrooms",0.12,"v"));
+foodarray.push(new food(29,"Onion",0.25,"v"));
+foodarray.push(new food(30,"Pea",1.48,"v"));
+foodarray.push(new food(31,"Spinach",0.08,"v"));
+foodarray.push(new food(32,"Sweetcord",1.3,"v"));
+foodarray.push(new food(33,"Tomato",0.2,"v"));
+foodarray.push(new food(34,"Egg",1.5,"m"));
+
+var prompt=document.getElementById('text');
+prompt.style="margin-left:30px; font-size:20px;Color:black";
+prompt.innerHTML="Enter the no of food you want to add and press confirm to go to next step<br>";
+var input=document.getElementById('input');
+input.style="margin-left:30px;font-size:20px;width:100px";
+input.type="number";
+input.min="1";
+input.max=foodarray.length;
+var foodno =document.getElementById("no");
+//ask user to input num
+var insert=document.getElementById('button');
+insert.style="margin-left:50px; font-size:20px";
+insert.width="100px";
+insert.height="40px";
+insert.innerHTML="Confirm"
+insert.addEventListener('click',setfood);
+//user go to set food html
+
+var returns=document.getElementById('return');
+returns.style="margin-left:50px; font-size:20px";
+returns.height="40px";
+returns.innerHTML="Return to food calorie table"
+returns.addEventListener('click',foodcalorietable);
+//user go to set food html
+
+var allbut =document.getElementById("all");
+all.style="margin-left:30px; font-size:20px; width:100px;height:40px";
+allbut.addEventListener('click',displayfood);
+//user change table to all type
+
+var mbut =document.getElementById("meat");
+mbut.style="font-size:20px; width:100px;height:40px";
+mbut.addEventListener('click',displaymeatfood);
+//user change table to meat type
+
+var cbut =document.getElementById("carbo");
+cbut.style="font-size:20px; width:200px;height:40px";
+cbut.addEventListener('click',displaycarbofood);
+//user change table to carbohydrate type
+
+var vegebut =document.getElementById("vege");
+vegebut.style="font-size:20px; width:120px;height:40px";
+vegebut.addEventListener('click',displayvegefood);
+//user change table to vegetable type
+
+
+//define button function
+var table=document.getElementById('table');
+table.style="margin-left:30px;margin-top:20px; font-size:20px";
+table.border="3px; solid black";
+table.style.color="black";
+table.id="foodtable";
+var tr=table.insertRow();
+var td=tr.insertCell();  
+td.style="color:black; text-align:center;";
+td.style.width='200px';
+td.style.height='40px';
+td.innerHTML="Food No";
+var td=tr.insertCell();  
+td.style="color:black; text-align:center;";
+td.style.width='200px';
+td.style.height='40px';
+td.innerHTML="Food";
+var td=tr.insertCell();  
+td.style="color:black; text-align:center;";
+td.style.width='200px';
+td.style.height='40px';
+td.innerHTML="Calorie/gram";
+
+var start=true;
+//display all
+  function displayfood(){
+    if(start==false){
+    var foodtableoption=document.getElementById("foodtable");
+    var rowcount=foodtableoption.rows.length;
+    for(var i=1; i<rowcount;i++){
+    foodtableoption.deleteRow(1);
+    }
+    }
+    else{
+      start=false;
+    }
+    for(var i=1; i<foodarray.length;i++){
+    var tr=table.insertRow();
+    var td=tr.insertCell();  
+    td.style.width='200px';
+    td.style.textAlign='center';
+    td.style.height='40px';
+    td.style="color:black; text-align:center;";
+    td.innerHTML=foodarray[i].no;
+    var td=tr.insertCell();  
+    td.style.width='200px';
+    td.style.textAlign='center';
+    td.style.height='40px';
+    td.style="color:black; text-align:center;";
+    td.innerHTML=foodarray[i].name;
+    var td=tr.insertCell();  
+    td.style.width='200px';
+    td.style.textAlign='center';
+    td.style.height='40px';
+    td.style="color:black; text-align:center;";
+    td.innerHTML=foodarray[i].cpg.toFixed(2);    
+    }
+}
+//display meat
+function displaymeatfood(){
+  var foodtableoption=document.getElementById("foodtable");
+  var rowcount=foodtableoption.rows.length;
+  for(var i=1; i<rowcount;i++){
+    foodtableoption.deleteRow(1);
+  }
+    for(var i=1; i<foodarray.length;i++){
+      if(foodarray[i].category=="m")
+      {
+     var tr=table.insertRow();
+    var td=tr.insertCell();  
+    td.style.width='200px';
+    td.style.textAlign='center';
+    td.style.height='40px';
+    td.style="color:black; text-align:center;";
+    td.innerHTML=foodarray[i].no;
+    var td=tr.insertCell();  
+    td.style.width='200px';
+    td.style.textAlign='center';
+    td.style.height='40px';
+    td.style="color:black; text-align:center;";
+    td.innerHTML=foodarray[i].name;
+    var td=tr.insertCell();  
+    td.style.width='200px';
+    td.style.textAlign='center';
+    td.style.height='40px';
+    td.style="color:black; text-align:center;";
+    td.innerHTML=foodarray[i].cpg.toFixed(2);    
+    }
+    }
+
+}
+//display carbo
+function displaycarbofood(){
+  var foodtableoption=document.getElementById("foodtable");
+  var rowcount=foodtableoption.rows.length;
+  for(var i=1; i<rowcount;i++){
+    foodtableoption.deleteRow(1);
+  }
+    for(var i=1; i<foodarray.length;i++){
+      if(foodarray[i].category=="c")
+      {
+     var tr=table.insertRow();
+    var td=tr.insertCell();  
+    td.style.width='200px';
+    td.style.textAlign='center';
+    td.style.height='40px';
+    td.style="color:black; text-align:center;";
+    td.innerHTML=foodarray[i].no;
+    var td=tr.insertCell();  
+    td.style.width='200px';
+    td.style.textAlign='center';
+    td.style.height='40px';
+    td.style="color:black; text-align:center;";
+    td.innerHTML=foodarray[i].name;
+    var td=tr.insertCell();  
+    td.style.width='200px';
+    td.style.textAlign='center';
+    td.style.height='40px';
+    td.style="color:black; text-align:center;";
+    td.innerHTML=foodarray[i].cpg.toFixed(2);    
+    }
+    }
+}
+
+//display vege
+function displayvegefood(){
+  var foodtableoption=document.getElementById("foodtable");
+  var rowcount=foodtableoption.rows.length;
+  for(var i=1; i<rowcount;i++){
+    foodtableoption.deleteRow(1);
+  }
+    for(var i=1; i<foodarray.length;i++){
+      if(foodarray[i].category=="v")
+      {
+     var tr=table.insertRow();
+    var td=tr.insertCell();  
+    td.style.width='200px';
+    td.style.textAlign='center';
+    td.style.height='40px';
+    td.style="color:black; text-align:center;";
+    td.innerHTML=foodarray[i].no;
+    var td=tr.insertCell();  
+    td.style.width='200px';
+    td.style.textAlign='center';
+    td.style.height='40px';
+    td.style="color:black; text-align:center;";
+    td.innerHTML=foodarray[i].name;
+    var td=tr.insertCell();  
+    td.style.width='200px';
+    td.style.textAlign='center';
+    td.style.height='40px';
+    td.style="color:black; text-align:center;";
+    td.innerHTML=foodarray[i].cpg.toFixed(2);    
+    }
+    }
+}
+
+var exist=0;
+function setfood()
+{
+    var no=document.getElementById('input').value;
+    for(var i=1;i<foodarray.length;i++){
+      if(no==foodarray[i].no){
+            localStorage.setItem("foodno",no);
+            localStorage.setItem("foodname",foodarray[i].name);
+            localStorage.setItem("foodcpg",foodarray[i].cpg);
+            exist+=1;
+            break;
+        }
+        
+    }
+    if(exist==0){
+            alert("number not found!");
+            
+        }
+    else if(exist==1){
+      window.location.href="setfood.html";
+    }
+    }
+    
+    function foodcalorietable(){
+      window.location.href="foodtable.html";
+    }
+
+  displayfood();
+</script>
+
+
+
+
+
+
+  <div id="search">
+    <button type="button" class="close">×</button>
+    <form>
+      <input type="search" value="" placeholder="type keyword(s) here" />
+      <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+  </div>
+  <!-- jquery vendor -->
+  <script src="assets/js/lib/jquery.min.js"></script>
+  <script src="assets/js/lib/jquery.nanoscroller.min.js"></script>
+  <script src="assets/js/lib/menubar/sidebar.js"></script>
+  <script src="assets/js/lib/preloader/pace.min.js"></script>
+  <script src="assets/js/scripts.js"></script>
+
+
+</body>
+
+</html>

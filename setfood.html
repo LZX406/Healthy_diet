@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <script type="text/javascript" src="assets/js/databaseurl.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="assets/images/eclogo.jpeg"/>
+    <title>Set food</title>
+
+    <!-- Styles -->
+    <link href="assets/css/lib/chartist/chartist.min.css" rel="stylesheet">
+    <link href="assets/css/lib/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/lib/menubar/sidebar.css" rel="stylesheet">
+    <link href="assets/css/lib/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="assets/css/lib/helper.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <style>
+      button:hover{
+        background-color:black;
+        color:white;
+      }
+
+      button{
+        color:black;
+      }
+
+    </style>
+  </head>
+
+  <body>
+    <div class="sidebar sidebar-hide-to-small sidebar-shrink sidebar-gestures">
+      <div class="nano">
+        <div class="nano-content">
+          <div class="logo"><span> <img src="assets/images/eclogo.jpeg" width="250px" height="250px"></span>
+            
+              <!-- <img src="assets/images/logo.png" alt="" /> -->
+              <span>Healthy Diet</span>
+          </div>
+          <ul>
+            <li class="label">Apps</li>
+                <li>
+                  <a href="foodtable.html"><i class="ti-angle-right"></i>Calculate food calorie</a>
+                </li>
+                <li>
+                  <a href="addusercalorie.html"><i class="ti-angle-right"></i>Calculate daily calorie</a>
+                </li>
+                <li>
+                  <a href="Calorieshistory2.html"><i class="ti-angle-right"></i>View calories history</a>
+                </li>
+                <li>
+                  <a href="selectexercise.html"><i class="ti-angle-right"></i>View amount of exercise</a>
+                </li>
+                <li>
+                  <a href="calculateBMI.html"><i class="ti-angle-right"></i>Calculate BMI</a>
+                </li>
+                <li>
+                  <a href="BMI_history.html"><i class="ti-angle-right"></i>BMI Record</a>
+                </li>
+            <li>
+              <a href="app-profile.html">
+                <i class="ti-user"></i> Profile</a>
+            </li>
+            <li class="label">Features</li>
+            <li>
+              <a href="page-reset-password_f.html">
+                <i class="ti-target"></i> Reset password
+              </a>
+            </li>
+            <li>
+              <a  onclick="logout()">
+                <i class="ti-close"></i> Logout</a>
+            </li>
+          </ul></div></div></div>
+    <!-- /# sidebar -->
+    <div class="header">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="float-left">
+              <div class="hamburger sidebar-toggle">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+              </div>
+            </div>
+            <div class="float-right">
+              <div class="dropdown dib">
+                <div class="header-icon" >
+                  <span class="user-avatar" id="avatarname">
+                    <i class="ti-angle-down f-s-10"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="content-wrap">
+      <div class="card nestable-cart">
+      <h2 style="margin-left:30px">Food detail</h2>
+      <ln id="text"></ln>
+      <table id="table"></table>
+      <ln>
+      <button id="button1">Add</button>
+      <button id="button2">Return</button></ln><br><br>
+      <ln style="margin-left:30px; color:black;" id="Adding"></ln>
+      </div>
+      
+      <script type="module">
+        
+        var foodnum;
+        //check session timeout
+    if(localStorage.getItem("calorieusername"))
+    { var currenttime=new Date().getTime();
+      var checkexpire=JSON.parse(localStorage.getItem("calorieusername"));
+      if(currenttime-checkexpire.time>=checkexpire.expire)
+      {
+        alert("session timeout");
+        localStorage.removeItem("calorieusername");
+        window.location.href="page-login_f.html";
+      }
+    }
+    else{
+      window.location.href="page-login_f.html";
+    }
+
+        var username=JSON.parse(localStorage.getItem("calorieusername")).value;
+        
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET','https://localhost/Healthy_diet/service/setcustomfood.php/'+username,true);
+        xhr.send();
+        xhr.onload = function(){
+      //console.log(xhr3.responseText);
+      try{
+        foodnum=JSON.parse(xhr.responseText);
+        foodnum+=1;
+        }
+        catch(err){
+          foodnum=1;
+        }
+      console.log(foodnum);
+        }
+        document.getElementById("avatarname").innerHTML=username;
+
+        var foodname=localStorage.getItem("foodname");
+        var foodcpg=localStorage.getItem("foodcpg");
+        var table=document.getElementById("table");
+        table.border="3px; solid black";
+        table.style="margin-left:30px; margin-top:30px";
+        var prompt=document.getElementById('text');
+        prompt.style="margin-left:30px; font-size:20px;Color:black";
+        prompt.innerHTML="Insert the food gram and selcect cooking method, click add button once done";
+        var tr=table.insertRow();
+        var td=tr.insertCell();
+        td.style.width='200px';
+        td.style.textAlign='center';
+        td.style.height='80px';
+        td.innerHTML="Food";
+        td.style.color="black";
+        var td2=tr.insertCell();
+        td2.style.width='200px';
+        td2.style.textAlign='center';
+        td2.style.height='80px';
+        td2.innerHTML="Calorie per gram";
+        td2.style.color="black";
+        var td3=tr.insertCell();
+        td3.style.width='200px';
+        td3.style.textAlign='center';
+        td3.style.height='80px';
+        td3.innerHTML="Gram";
+        td3.style.color="black";
+        var td4=tr.insertCell();
+        td4.style.width='120px';
+        td4.style.textAlign='center';
+        td4.style.height='80px';
+        td4.innerHTML="Cooking Method";
+        td4.style.color="black";
+        //first row
+
+var tr=table.insertRow();
+        var td=tr.insertCell();
+        td.style.width='200px';
+        td.style.textAlign='center';
+        td.style.height='80px';
+        td.innerHTML=foodname;
+        td.style.color="black";
+        var td2=tr.insertCell();
+        td2.style.width='200px';
+        td2.style.textAlign='center';
+        td2.style.height='80px';
+        td2.innerHTML=foodcpg;
+        td2.style.color="black";
+        var td3=tr.insertCell();
+        td3.style.width='200px';
+        td3.style.textAlign='center';
+        td3.style.height='80px';
+        td3.style.color="black";
+        var fg=document.createElement("input");
+        fg.type="number";
+        fg.id="foodgram";
+        fg.style.width="120px";
+        fg.min="1";
+        td3.append(fg);
+        var td4=tr.insertCell();
+        td4.style.width='120px';
+        td4.style.height='80px';
+        td4.style.textAlign='center';
+        var cm=document.createElement("select");
+        var cmarray=["none","baking","boiling","steaming","stewing","frying"];
+        var cmvalue=[1.0,1.1,1.0,1.0,1.4,1.6];
+        cm.id="cmselect";
+        for( var i=0;i<cmarray.length;i++)
+        {
+          var option=document.createElement("option");
+          option.value=cmvalue[i];
+          option.text=cmarray[i];
+          cm.appendChild(option);
+        }
+        td4.appendChild(cm);
+
+        var button=document.getElementById("button1");
+        button.style="margin-left:30px; margin-top:50px";
+        button.style.width="80px";
+        button.style.height="40px";
+        button.style.color="black";
+        button.onmouseover=changeaddfontwhite;
+        button.onmouseleave=changeaddfontblack;
+        var button2=document.getElementById("button2");
+        button2.style="margin-left:100px; margin-top:50px";
+        button2.style.width="100px";
+        button2.style.height="40px";
+        button2.style.color="black";
+        button2.className="return";
+        button2.onmouseover=changefontwhite;
+        button2.onmouseleave=changefontblack;
+
+        var save =document.getElementById("button1");
+        save.addEventListener('click',setfood);
+        var return1=document.getElementById("button2");
+        return1.addEventListener('click',returnpage);
+
+        //insert food data
+        async function setfood()
+        {
+        
+        var gram=document.getElementById('foodgram').value;
+        var cmethod=document.getElementById('cmselect');
+        var cookm=cmethod.options[cmethod.selectedIndex].text; 
+        var cookvalue=cmethod.options[cmethod.selectedIndex].value;
+        var totalc=foodcpg*gram*cookvalue;
+        if(gram)
+        {
+          var text=document.getElementById("Adding");
+        text.innerHTML="Adding data, please wait";
+        const xhr2 = new XMLHttpRequest();
+        xhr2.open('POST','https://localhost/Healthy_diet/service/setfood.php/'+username+'/'+foodnum+'/'+foodname+'/'+foodcpg+'/'+gram+'/'+cookm+'/'+totalc.toFixed(2),true);
+        xhr2.send();
+        xhr2.onload = function(){
+      //console.log(xhr2.responseText);
+      window.location.href="foodtable.html";
+        }
+        xhr2.onerror= function(error){
+          alert( error );
+        }
+        
+        }
+        else {
+          alert("gram value must enter");
+        }
+        }
+
+        function returnpage(){
+            window.location.href="foodlist.html";
+        }
+        function changeaddfontwhite(){
+            document.getElementById("button1").style.color="white";
+        }
+        function changeaddfontblack(){
+            document.getElementById("button1").style.color="black";
+        }
+        function changefontwhite(){
+            document.getElementById("button2").style.color="white";
+        }
+        function changefontblack(){
+            document.getElementById("button2").style.color="black";
+        }
+
+</script> 
+    </div>
+
+    <div id="search">
+      <button type="button" class="close">×</button>
+      <form>
+        <input type="search" value="" placeholder="type keyword(s) here" />
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+    </div>
+    <!-- jquery vendor -->
+    <script src="assets/js/lib/jquery.min.js"></script>
+    <script src="assets/js/lib/jquery.nanoscroller.min.js"></script>
+    <!-- nano scroller -->
+    <script src="assets/js/lib/menubar/sidebar.js"></script>
+    <script src="assets/js/lib/preloader/pace.min.js"></script>
+    <!-- sidebar -->
+  
+  </body>
+
+</html>

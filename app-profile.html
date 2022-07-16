@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="text/javascript" src="assets/js/databaseurl.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="assets/images/eclogo.jpeg"/>
+    <title>Profile</title>
+
+    <!-- Common -->
+    <link href="assets/css/lib/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/lib/menubar/sidebar.css" rel="stylesheet">
+    <link href="assets/css/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/lib/helper.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <style>
+      button:hover{
+        background-color:black;
+        color:white;
+      }
+
+      button{
+        color:black;
+      }
+
+    </style>
+</head>
+
+<body>
+  <div class="sidebar sidebar-hide-to-small sidebar-shrink sidebar-gestures">
+    <div class="nano">
+      <div class="nano-content">
+        <div class="logo"><span> <img src="assets/images/eclogo.jpeg" width="250px" height="250px"></span>
+          
+            <!-- <img src="assets/images/logo.png" alt="" /> -->
+            <span>Healthy Diet</span>
+        </div>
+        <ul>
+          <li class="label">Apps</li>
+              <li>
+                <a href="foodtable.html"><i class="ti-angle-right"></i>Calculate food calorie</a>
+              </li>
+              <li>
+                <a href="addusercalorie.html"><i class="ti-angle-right"></i>Calculate daily calorie</a>
+              </li>
+              <li>
+                <a href="Calorieshistory.html"><i class="ti-angle-right"></i>View calories history</a>
+              </li>
+              <li>
+                <a href="selectexercise.html"><i class="ti-angle-right"></i>View amount of exercise</a>
+              </li>
+              <li>
+                <a href="calculateBMI.html"><i class="ti-angle-right"></i>Calculate BMI</a>
+              </li>
+              <li>
+                <a href="BMI_history.html"><i class="ti-angle-right"></i>BMI Record</a>
+              </li>
+          <li>
+            <a href="app-profile.html">
+              <i class="ti-user"></i> Profile</a>
+          </li>
+          <li class="label">Features</li>
+          <li>
+            <a href="page-reset-password_f.html">
+              <i class="ti-target"></i> Reset password
+            </a>
+          </li>
+          <li>
+            <a  onclick="logout()">
+              <i class="ti-close"></i> Logout</a>
+          </li>
+        </ul></div></div></div>
+  <!-- /# sidebar -->
+  <div class="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="float-left">
+            <div class="hamburger sidebar-toggle">
+              <span class="line"></span>
+              <span class="line"></span>
+              <span class="line"></span>
+            </div>
+          </div>
+          <div class="float-right">
+              <div class="header-icon" >
+                <a href="app-profile.html">
+                <span class="user-avatar" id="avatarname">
+                  </a>
+                </span>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+  <div class="content-wrap">
+    <div class="main">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-8 p-r-0 title-margin-right">
+            <div class="page-header">
+              <div class="page-title">
+                <h2 style="Color:black">Hello,Welcome Here
+                </h2>
+              </div>
+            </div>
+          </div>
+          <!-- /# column -->
+          <div class="col-lg-4 p-l-0 title-margin-left">
+            <div class="page-header">
+              <div class="page-title">
+                <h2 style="margin-left:30px;Color:black">App-Profile</h2>
+              </div>
+            </div>
+          </div>
+          <!-- /# column -->
+        </div>
+        <!-- /# row -->
+        <section id="main-content">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="user-profile">
+                    <div class="row">
+                      <div >
+
+                      </div>
+                      <div class="col-lg-8">
+                        <div style="color:black" class="user-profile-name">WELCOME</div>
+                        <div class="custom-tab user-profile-tab">
+                          <ul class="nav nav-tabs" role="tablist">
+                            <li style="color:black" role="presentation" class="active">
+                              User Profile
+                            </li>
+                          </ul>
+                          <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="1">
+                              <form style="color:black" class="edit" id="">
+    
+                                <label for="name">Name:</label>
+                                <input type="text" name="name" class="name" required> <br><br>
+                                <label for="age">Age:</label>
+                                <input type="number" name="age" required> <br><br>
+                                <label for="weight">Weight:</label>
+                                <input type="number" name="weight" required> kg <br><br>
+                                <label for="height">Height:</label>
+                                <input type="number" name="height" required> cm <br><br>
+
+                                <button >Save Profile</button>
+                                    
+                              </form>
+                              </div>
+                             
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>  
+              <!-- /# card -->
+            </div>
+            <!-- /# column -->
+          </div>
+          
+        </section>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+    <!-- Common -->
+    <script src="assets/js/lib/jquery.min.js"></script>
+    <script src="assets/js/lib/jquery.nanoscroller.min.js"></script>
+    <script src="assets/js/lib/menubar/sidebar.js"></script>
+    <script src="assets/js/lib/preloader/pace.min.js"></script>
+
+    <script src="assets/js/scripts.js"></script>
+
+    <!------------------------ Configuration ----------------------------------->
+    
+    <script type="module">
+
+      const profileForm = document.querySelector("form");
+
+      const profileName = profileForm.querySelector('input[name="name"]');
+      const profileAge = profileForm.querySelector('input[name="age"]');
+      const profileWeight = profileForm.querySelector('input[name="weight"]');
+      const profileHeight = profileForm.querySelector('input[name="height"]');
+      const profileClass = document.querySelector('.edit');
+
+      
+      
+       // Import the functions you need from the SDKs you need
+       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+    
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+            apiKey: "AIzaSyDmezgJ-zRbF17C5gcxaFadUdk6OGA2f1I",
+            authDomain: "healthydiet-cb745.firebaseapp.com",
+            projectId: "healthydiet-cb745",
+            storageBucket: "healthydiet-cb745.appspot.com",
+            messagingSenderId: "549986503315",
+            appId: "1:549986503315:web:66a560c21f7a12f91e5b66"
+      };
+    
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+
+      import {getFirestore, doc, getDoc, getDocs, onSnapshot, collection, query, updateDoc,
+    addDoc, deleteDoc, where,
+    orderBy, serverTimestamp
+      }
+      from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js"; 
+
+      const db = getFirestore();
+      
+      if(localStorage.getItem("calorieusername"))
+    { var currenttime=new Date().getTime();
+      var checkexpire=JSON.parse(localStorage.getItem("calorieusername"));
+      if(currenttime-checkexpire.time>=checkexpire.expire)
+      {
+        alert("session timeout");
+        localStorage.removeItem("calorieusername");
+        window.location.href="page-login_f.html";
+      }
+    }
+    else{
+      window.location.href="page-login_f.html";
+    }
+
+        var username=JSON.parse(localStorage.getItem("calorieusername")).value;
+        document.getElementById("avatarname").innerHTML=username;
+
+        //collection ref
+const colRef = collection(db, 'users');
+
+//queries
+const q = query(colRef, where("username", "==", username));
+
+
+        //real-time collection data
+onSnapshot(q, (snapshot) => {
+
+    let users = []
+
+    let name = '';
+    let age = '';
+    let weight = '';
+    let height = '';
+
+    snapshot.docs.forEach((doc) => {
+
+        const userInfo = doc.data();
+        
+        name += `${userInfo.username}`;
+        age += `${userInfo.Age}`;
+        weight += `${userInfo.Weight}`;
+        height += `${userInfo.Height}`;
+        
+        users.push({
+            ...doc.data(), id: doc.id
+        })
+
+        // profileInfo.innerHTML += template;
+        profileClass.setAttribute('i', doc.id);
+        profileName.value = name;
+        profileAge.value = age;
+        profileWeight.value = weight;
+        profileHeight.value = height;
+
+    })
+})
+
+//update documents
+const editUserForm = document.querySelector('.edit');
+editUserForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const xhr = new XMLHttpRequest();
+    xhr.open('PUT','https://localhost/Healthy_diet/service/index.php/'+profileName.value+'/'+profileAge.value,true);
+    xhr.send();
+    xhr.onload = function(){
+        console.log(xhr.responseText);
+        //document.querySelector('#consume_webservice').innerHTML = xhr.responseText;
+   }
+    //const docRef = doc(db, 'users', username);
+    
+    //updateDoc(docRef, {
+       // Name: editUserForm.name.value,
+       // Age: editUserForm.age.value,
+       // Height: editUserForm.height.value,
+        //Weight: editUserForm.weight.value,
+    //})
+})
+      //getting all data
+      // async function GetAllDataOnce(){
+      //   const querySnapshot = await getDoc(doc(db,"users",username));
+
+      //   var user = [];
+      //   user.push(querySnapshot.data());
+
+      //   AddAllItemsToTable(user);
+      // }
+
+      
+      //window.onload = GetAllDataOnce;
+
+    
+    </script>
+    <script>
+      
+    </script>
+</body>
+
+</html>
