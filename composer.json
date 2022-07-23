@@ -1,6 +1,7 @@
 {
     "require": {
         "slim/slim": "^3.0",
-        "google/cloud-firestore": "^1.24"
+        "google/cloud-firestore": "^1.24",
+        "ext-grpc": "*"
     }
 }
