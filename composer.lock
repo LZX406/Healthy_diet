@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6ad59b03857f35f4ceddf6bb8f8c690e",
+    "content-hash": "bb3c57ff82ceef736c3be3aaf7a2de39",
     "packages": [
         {
             "name": "brick/math",
@@ -22,8 +22,7 @@
             },
             "require": {
                 "ext-json": "*",
-                "php": "^7.1 || ^8.0",
-                "ext-grpc":"*"
+                "php": "^7.1 || ^8.0"
             },
             "require-dev": {
                 "php-coveralls/php-coveralls": "^2.2",
@@ -69,16 +68,16 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v6.2.0",
+            "version": "v6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "d28e6df83830252650da4623c78aaaf98fb385f3"
+                "reference": "018dfc4e1da92ad8a1b90adc4893f476a3b41cb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/d28e6df83830252650da4623c78aaaf98fb385f3",
-                "reference": "d28e6df83830252650da4623c78aaaf98fb385f3",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/018dfc4e1da92ad8a1b90adc4893f476a3b41cb8",
+                "reference": "018dfc4e1da92ad8a1b90adc4893f476a3b41cb8",
                 "shasum": ""
             },
             "require": {
@@ -125,9 +124,9 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v6.2.0"
+                "source": "https://github.com/firebase/php-jwt/tree/v6.3.0"
             },
-            "time": "2022-05-13T20:54:50+00:00"
+            "time": "2022-07-15T16:48:45+00:00"
         },
         {
             "name": "google/auth",
@@ -450,16 +449,16 @@
         },
         {
             "name": "google/protobuf",
-            "version": "v3.21.2",
+            "version": "v3.21.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/protocolbuffers/protobuf-php.git",
-                "reference": "374edda06747bb1d6899d11af646ccab38646e65"
+                "reference": "e2497c2576556469963852216d886050e0606d8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/374edda06747bb1d6899d11af646ccab38646e65",
-                "reference": "374edda06747bb1d6899d11af646ccab38646e65",
+                "url": "https://api.github.com/repos/protocolbuffers/protobuf-php/zipball/e2497c2576556469963852216d886050e0606d8b",
+                "reference": "e2497c2576556469963852216d886050e0606d8b",
                 "shasum": ""
             },
             "require": {
@@ -489,9 +488,9 @@
             ],
             "support": {
                 "issues": "https://github.com/protocolbuffers/protobuf-php/issues",
-                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.21.2"
+                "source": "https://github.com/protocolbuffers/protobuf-php/tree/v3.21.3"
             },
-            "time": "2022-06-24T21:52:31+00:00"
+            "time": "2022-07-21T19:11:32+00:00"
         },
         {
             "name": "grpc/grpc",
@@ -1879,7 +1878,9 @@
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-grpc": "*"
+    },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
 }
