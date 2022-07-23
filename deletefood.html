@@ -153,13 +153,16 @@
         var foodcm;
         var foodgram;
         var foodtotalc;
-        const getfood=doc(db,"users", username,'FoodTable',foodnum);
-        const docSnap = await getDoc(getfood);
-        if(docSnap.exists()){
-        foodname=docSnap.data().NameOfFood;
-        foodcpg=docSnap.data().CPG;
-        foodcm=docSnap.data().cm;
-        foodgram=docSnap.data().gram;
+        const xhr = new XMLHttpRequest();
+          xhr.open('GET','https://localhost/Healthy_diet/service/deletefood.php/'+username+'/'+foodnum,true);
+          xhr.send();
+          xhr.onload = function(){
+        
+        var fooddata=JSON.parse(xhr.responseText);
+        foodname=fooddata.NameOfFood;
+        foodcpg=fooddata.CPG;
+        foodcm=fooddata.cm;
+        foodgram=fooddata.gram;
   
         var table=document.getElementById("table");
         table.border="3px; solid black";
@@ -237,47 +240,52 @@ var tr=table.insertRow();
         save.addEventListener('click',replace);
         var return1=document.getElementById("button2");
         return1.addEventListener('click',returnpage);
-        
+        }
+
+
         async function replace(){
         var text=document.getElementById("deleting");
         text.innerHTML="Deleting data, please wait";
         var foodarray=new Array(food);
-        var count=foodnum;
-         var getfoods=await getDocs(collection(db,"users", username,'FoodTable'));
-        getfoods.forEach(num=>{
-        if(parseInt(num.data().TableNo) > parseInt(foodnum))
+        var count=parseInt(foodnum);
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET','https://localhost/Healthy_diet/service/foodtable.php/'+username+'/table',true);
+        xhr.send();
+        xhr.onload = function(){
+      //console.log(xhr3.responseText);
+      var foodarrays=JSON.parse(xhr.responseText);
+        foodarrays.forEach(num=>{
+        if(num.TableNo > parseInt(foodnum))
         { 
-          foodno=(num.data().TableNo-1);
-          foodname=num.data().NameOfFood;
-          foodcpg=num.data().CPG;
-          foodcm=num.data().cm;
-          foodgram=num.data().gram;
-          foodtotalc=num.data().totalcalorie;
+          foodno=(num.TableNo-1);
+          foodname=num.NameOfFood;
+          foodcpg=num.CPG;
+          foodcm=num.cm;
+          foodgram=num.gram;
+          foodtotalc=num.totalcalorie;
           foodarray.push(new food(foodno,foodname,foodcpg,foodcm,foodgram,foodtotalc));
-          count++;
+          count+=1;
         }
         });
         for(var index=1;index<foodarray.length;index++)
       {     
-            setDoc( doc(db,"users", username,'FoodTable',(foodarray[index].no).toString()),{
-            TableNo:parseInt(foodarray[index].no),
-            NameOfFood:foodarray[index].name,
-            CPG:foodarray[index].cpg,
-            gram:foodarray[index].gram,
-            cm:foodarray[index].cm,
-            totalcalorie:(parseFloat(foodarray[index].totalc)).toFixed(2),
-            })
-            .catch((error)=>{
-            alert("error "+error);
-            });
+        const xhr2 = new XMLHttpRequest();
+        xhr2.open('PUT','https://localhost/Healthy_diet/service/deletefood.php/'+username+'/'+(foodarray[index].no).toString()+'/'+foodarray[index].name+'/'+foodarray[index].cpg+'/'+foodarray[index].gram+'/'+foodarray[index].cm+'/'+(parseFloat(foodarray[index].totalc)).toFixed(2),true);
+        xhr2.send();
+        xhr2.onerror= function(error){
+          alert( error );
         }
-        deleteDoc(doc(db,"users", username,"FoodTable",count.toString()))
-        .then(()=>{
-        window.location.href="foodtable.html";
-        })
-        .catch((error)=>{
-                alert("error "+error);
-        });
+        }
+        const xhr3 = new XMLHttpRequest();
+        xhr3.open('DELETE','https://localhost/Healthy_diet/service/deletefood.php/'+username+'/'+count,true);
+        xhr3.send();
+        xhr3.onload = function(){
+          window.location.href="foodtable.html";
+        }
+        xhr3.onerror= function(error){
+          alert( error );
+        }
+      }
       }
 
         function returnpage(){
@@ -297,7 +305,7 @@ var tr=table.insertRow();
             document.getElementById("button2").style.color="black";
         }
         
-        }
+        
 </script> 
 
 

@@ -93,4 +93,10 @@ class Firestore
     {
         $this->db->collection($this->name)->document($name)->collection('FoodTable')->document($num)->delete();
     }
+
+    public function getuserfood(string $name,string $num)
+    {
+        
+        return $this->db->collection($this->name)->document($name)->collection('FoodTable')->document($num)->snapshot()->data();  
+    }
 }

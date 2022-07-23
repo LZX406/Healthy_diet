@@ -9,7 +9,21 @@ require '../vendor/autoload.php';
 require_once 'GFirestore.php';
 $app = new \Slim\App;
 
-$app->get('/{user}', function (Request $request, Response $response, array $args) {
+$app->get('/{user}/{foodnum}', function (Request $request, Response $response, array $args) {
+    $user=$args['user'];
+    $foodnum=$args['foodnum'];
+    $fs=new Firestore( collection: 'users');
+    
+try{
+$data=$fs->getuserfood($user,$foodnum);
+echo json_encode($data);
+}catch(PDOException $e){
+    $data=array("statues"=>"fail");
+    echo json_endode($data);
+}    
+});
+
+$app->get('/{user}/table', function (Request $request, Response $response, array $args) {
     $user=$args['user'];
     $fs=new Firestore( collection: 'users');
     
@@ -45,6 +59,19 @@ $app->put('/{user}/{foodnum}/{foodname}/{foodcpg}/{gram}/{cookm}/{totalc}', func
     ];
 try{
 $array=$fs->updateuserfoodtable($user,$foodnum,$data);
+}catch(PDOException $e){
+    $data=array("statues"=>"fail");
+    echo json_endode($data);
+}    
+});
+
+$app->delete('/{user}/{foodnum}', function (Request $request, Response $response, array $args) {
+    $user=$args['user'];
+    $foodnum=$args['foodnum'];
+    $fs=new Firestore( collection: 'users');
+    
+try{
+$fs->deleteuserallfoodtable($user,$foodnum);
 }catch(PDOException $e){
     $data=array("statues"=>"fail");
     echo json_endode($data);

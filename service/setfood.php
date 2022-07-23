@@ -38,7 +38,7 @@ $app->post('/{user}/{foodnum}/{foodname}/{foodcpg}/{gram}/{cookm}/{totalc}', fun
     $data=[
         'CPG'=> $foodcpg,
         'NameOfFood'=>$foodname,
-        'TableNo'=>$foodnum,
+        'TableNo'=>(int)$foodnum,
         'cm'=>$cookm,
         'gram'=>$gram,
         'totalcalorie'=>$totalc
