@@ -7,6 +7,9 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 require '../vendor/autoload.php';
 require_once 'GFirestore.php';
+
+// Configure PHP to use the the Firebase session handler.
+
 $app = new \Slim\App;
 $app->get('/{user}', function (Request $request, Response $response, array $args) {
     $user=$args['user'];
@@ -56,6 +59,13 @@ echo "update successful";
     
 }    
 });
+
+$app->get('/', function (Request $request, Response $response, array $args) {
+    $response->getBody()->write("this is the root directory.....");
+
+    return $response;
+});
+
 //$response->getBody()->write("this is $place");
 //print_r($fs->getDocument(name:''))
 $app->run();

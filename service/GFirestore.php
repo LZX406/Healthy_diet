@@ -4,6 +4,7 @@ header("Content-Type: application/json; charset=UTF-8");
 header('Access-Control-Allow-Headers: *' );
 require_once '../vendor/autoload.php';
 use Google\Cloud\Firestore\FirestoreClient;
+
 class Firestore
 {
     protected $db;
