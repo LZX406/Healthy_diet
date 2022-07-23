@@ -1,5 +1,4 @@
 runtime: php73
-api_version: 1
 
 handlers:
 - url: /
