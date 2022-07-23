@@ -1,22 +1,14 @@
 runtime: php73
 
+entrypoint:
+  serve index.html
+
 handlers:
 - url: /
   script: home.php
 
-- url: /index\.html
+- url: /index.html
   script: home.php
-
-- url: /stylesheets
-  static_dir: stylesheets
-
-- url: /(.*\.(gif|png|jpg))$
-  static_files: static/\1
-  upload: static/.*\.(gif|png|jpg)$
-
-- url: /admin/.*
-  script: admin.php
-  login: admin
 
 - url: /.*
   script: not_found.php
