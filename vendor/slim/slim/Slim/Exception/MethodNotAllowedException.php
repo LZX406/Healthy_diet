@@ -1,26 +1,25 @@
 <?php
-/**
- * Slim Framework (https://slimframework.com)
- *
- * @license https://github.com/slimphp/Slim/blob/3.x/LICENSE.md (MIT License)
- */
 
 namespace Slim\Exception;
 
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class MethodNotAllowedException extends SlimException
 {
     /**
+     * HTTP methods allowed
+     *
      * @var string[]
      */
     protected $allowedMethods;
 
     /**
+     * Create new exception
+     *
      * @param ServerRequestInterface $request
-     * @param ResponseInterface      $response
-     * @param string[]               $allowedMethods
+     * @param ResponseInterface $response
+     * @param string[] $allowedMethods
      */
     public function __construct(ServerRequestInterface $request, ResponseInterface $response, array $allowedMethods)
     {
@@ -29,6 +28,8 @@ class MethodNotAllowedException extends SlimException
     }
 
     /**
+     * Get allowed methods
+     *
      * @return string[]
      */
     public function getAllowedMethods()
