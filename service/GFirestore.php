@@ -12,7 +12,7 @@ class Firestore
     public function __construct(string $collection){
     
         $this->db= new FirestoreClient([
-            'projectId' => 'calorie-7fff0']);
+            'projectId' => 'healthydiet-cb745']);
         $this->name=$collection;
         //print("connected $this->name");
     

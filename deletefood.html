@@ -109,12 +109,6 @@
     </div></div>
     
       <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
-        
-        const app=initializeApp(connect());
-        import{getFirestore,onSnapshot,doc,getDoc,setDoc,getDocs,collection,addDoc, updateDoc,deleteDoc,deleteField}
-        from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js"
-        const db=getFirestore();
 
         //check session timeout
     if(localStorage.getItem("calorieusername"))
@@ -154,7 +148,7 @@
         var foodgram;
         var foodtotalc;
         const xhr = new XMLHttpRequest();
-          xhr.open('GET','https://localhost/Healthy_diet/service/deletefood.php/'+username+'/'+foodnum,true);
+          xhr.open('GET','service/deletefood.php/'+username+'/'+foodnum,true);
           xhr.send();
           xhr.onload = function(){
         
@@ -249,7 +243,7 @@ var tr=table.insertRow();
         var foodarray=new Array(food);
         var count=parseInt(foodnum);
         const xhr = new XMLHttpRequest();
-        xhr.open('GET','https://localhost/Healthy_diet/service/foodtable.php/'+username+'/table',true);
+        xhr.open('GET','service/foodtable.php/'+username+'/table',true);
         xhr.send();
         xhr.onload = function(){
       //console.log(xhr3.responseText);
@@ -270,14 +264,14 @@ var tr=table.insertRow();
         for(var index=1;index<foodarray.length;index++)
       {     
         const xhr2 = new XMLHttpRequest();
-        xhr2.open('PUT','https://localhost/Healthy_diet/service/deletefood.php/'+username+'/'+(foodarray[index].no).toString()+'/'+foodarray[index].name+'/'+foodarray[index].cpg+'/'+foodarray[index].gram+'/'+foodarray[index].cm+'/'+(parseFloat(foodarray[index].totalc)).toFixed(2),true);
+        xhr2.open('PUT','service/deletefood.php/'+username+'/'+(foodarray[index].no).toString()+'/'+foodarray[index].name+'/'+foodarray[index].cpg+'/'+foodarray[index].gram+'/'+foodarray[index].cm+'/'+(parseFloat(foodarray[index].totalc)).toFixed(2),true);
         xhr2.send();
         xhr2.onerror= function(error){
           alert( error );
         }
         }
         const xhr3 = new XMLHttpRequest();
-        xhr3.open('DELETE','https://localhost/Healthy_diet/service/deletefood.php/'+username+'/'+count,true);
+        xhr3.open('DELETE','service/deletefood.php/'+username+'/'+count,true);
         xhr3.send();
         xhr3.onload = function(){
           window.location.href="foodtable.html";

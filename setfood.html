@@ -132,7 +132,7 @@
         var username=JSON.parse(localStorage.getItem("calorieusername")).value;
         
         const xhr = new XMLHttpRequest();
-        xhr.open('GET','https://localhost/Healthy_diet/service/setcustomfood.php/'+username,true);
+        xhr.open('GET','service/setcustomfood.php/'+username,true);
         xhr.send();
         xhr.onload = function(){
       //console.log(xhr3.responseText);
@@ -258,7 +258,7 @@ var tr=table.insertRow();
           var text=document.getElementById("Adding");
         text.innerHTML="Adding data, please wait";
         const xhr2 = new XMLHttpRequest();
-        xhr2.open('POST','https://localhost/Healthy_diet/service/setfood.php/'+username+'/'+foodnum+'/'+foodname+'/'+foodcpg+'/'+gram+'/'+cookm+'/'+totalc.toFixed(2),true);
+        xhr2.open('POST','service/setfood.php/'+username+'/'+foodnum+'/'+foodname+'/'+foodcpg+'/'+gram+'/'+cookm+'/'+totalc.toFixed(2),true);
         xhr2.send();
         xhr2.onload = function(){
       //console.log(xhr2.responseText);

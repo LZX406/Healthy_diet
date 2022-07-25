@@ -112,12 +112,7 @@
     </div></div>
     
       <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
-
-        const app=initializeApp(connect());
-        import{getFirestore,onSnapshot,doc,getDoc,setDoc,getDocs,collection,addDoc, updateDoc,deleteDoc,deleteField}
-        from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js"
-        const db=getFirestore();
+        
         var foodarray=[];
         //check session timeout
     if(localStorage.getItem("calorieusername"))
@@ -145,7 +140,7 @@
         var foodg;
         var change=0;
         const xhr = new XMLHttpRequest();
-        xhr.open('GET','https://localhost/Healthy_diet/service/updatefood.php/'+username,true);
+        xhr.open('GET','service/updatefood.php/'+username,true);
         xhr.send();
         xhr.onload = function(){
       //console.log(xhr3.responseText);
@@ -268,7 +263,7 @@ var tr=table.insertRow();
       text.innerHTML="Updating data, please wait";
       change+=1;
       const xhr2 = new XMLHttpRequest();
-    xhr2.open('PUT','https://localhost/Healthy_diet/service/updatefood.php/'+username+'/'+foodnum+'/'+foodname+'/'+foodcpg+'/'+gram+'/'+cookm+'/'+totalc.toFixed(2),true);
+    xhr2.open('PUT','service/updatefood.php/'+username+'/'+foodnum+'/'+foodname+'/'+foodcpg+'/'+gram+'/'+cookm+'/'+totalc.toFixed(2),true);
     xhr2.send();
     xhr2.onload = function(){
   //console.log(xhr2.responseText);
