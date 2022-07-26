@@ -192,6 +192,7 @@
 
 //----------------------------Adding Document---------------------------------//
 
+<<<<<<< HEAD
         // async function AddDocument_AutoID(){
         //     var ref = collection(db, "users");
 
@@ -224,6 +225,40 @@
         //         alert("Unsuccessful operation, error:" + error);
         //     });
         // }
+=======
+        async function AddDocument_AutoID(){
+            var ref = collection(db, "users");
+
+            const docRef = await addDoc(
+                ref, {
+                    NameOfStd: Namebox.value
+                }
+            )
+            .then(()=>{
+                alert("data added successfully");
+            })
+            .catch((error) =>{
+                alert("Unsuccessful operation, error:" + error);
+            });
+            console.log("document id is "+docRef.id);
+        }
+
+        async function AddDocument_CustomID(){
+            var ref = collection(db, "users", RollBox.value);
+
+            await setDoc(
+                ref, {
+                    NameOfStd: Namebox.value
+                }
+            )
+            .then(()=>{
+                alert("data added successfully");
+            })
+            .catch((error) =>{
+                alert("Unsuccessful operation, error:" + error);
+            });
+        }
+>>>>>>> master
 
 //----------------------------Getting a Doc-----------------------------------//
 
@@ -236,6 +271,7 @@
 
             let today = Timestamp.fromDate(pretoday);
 
+<<<<<<< HEAD
             // var histref = collection(db, "users", username2, "Calorierecord");
             var calories = [];
             xhr.open('GET','https://localhost/Healthy_diet/service/SelectExercise.php/'+username+'/caloriehistory',true);
@@ -271,10 +307,36 @@
             xhr.onload = function(){
             record=JSON.parse(xhr.responseText);
             if (record.exists()){
+=======
+            var histref = collection(db, "users", username2, "Calorierecord");
+
+            var ucref = doc(db, "users", username2, "UserdailyCalorie", "record");
+
+            const q = query(histref, where("createdAt", ">", today));
+
+            const r = query(ucref);
+
+            const querySnapshot = await getDocs(q);
+
+                //Calculate total calorie 
+                var calories = [];
+
+                querySnapshot.forEach(doc => {
+                    calories.push(doc.data().Totalcalorie);
+                });
+            
+                const docSnap = await getDoc(r);
+
+                //Calculate total calorie 
+                var ucalorie;
+
+                if (docSnap.exists()){
+>>>>>>> master
                   ucalorie = docSnap.data().UserDailyCalorie;
                 } else {
                   console.log("No such document!");
                 }
+<<<<<<< HEAD
               
             }
             // var ucref = doc(db, "users", username2, "UserdailyCalorie", "record");
@@ -285,6 +347,8 @@
                 
 
                 
+=======
+>>>>>>> master
                 
                 AddCalories(calories, ucalorie);
                 Caloriebox.value = ucalorie;
@@ -300,6 +364,7 @@
 
 //----------------------------Updating a Doc----------------------------------//
 
+<<<<<<< HEAD
 //          async function UpdateDoc(){
 //             var ref = collection(db, "users", RollBox.value);
 
@@ -335,6 +400,43 @@
 //                 alert("Unsuccessful operation, error:"+ error);
 //             });
 //         }
+=======
+         async function UpdateDoc(){
+            var ref = collection(db, "users", RollBox.value);
+
+            await updateDoc(
+                ref, {
+                    NameOfStd: Namebox.value
+                }
+            )
+            .then(()=>{
+                alert("data updated successfully");
+            })
+            .catch((error) =>{
+                alert("Unsuccessful operation, error:" + error);
+            });
+        }
+
+//----------------------------Deleting a Doc----------------------------------//
+
+        async function DeleteDoctument(){
+            var ref = doc(db, "users", Rollbox.value);
+            const docSnap = await getDoc(ref);
+
+            if(!docSnap.exists()){
+                alert("Document does not exist");
+                return;
+            }
+
+            await deleteDoc(ref)
+            .then(()=>{
+                alert("data deleted successfully");
+            })
+            .catch((error)=>{
+                alert("Unsuccessful operation, error:"+ error);
+            });
+        }
+>>>>>>> master
 
 //----------------------------Filling the Table-------------------------------//
 

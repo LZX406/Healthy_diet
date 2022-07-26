@@ -7,7 +7,9 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 require '../vendor/autoload.php';
 require_once 'GFirestore.php';
-phpinfo();
+
+// Configure PHP to use the the Firebase session handler.
+
 $app = new \Slim\App;
 $app->get('/{user}', function (Request $request, Response $response, array $args) {
     $user=$args['user'];
@@ -59,5 +61,29 @@ echo "update successful";
 });
 //$response->getBody()->write("this is $place");
 //print_r($fs->getDocument(name:''))
+
+$app->get('/', function (Request $request, Response $response, array $args) {
+    $response->getBody()->write("this is the root directory.....");
+
+    return $response;
+});
+
+$app->get('/{user}/table', function (Request $request, Response $response, array $args) {
+    $user=$args['user'];
+    $fs=new Firestore( collection: 'users');
+    
+try{
+    $filenum=[];
+$array=$fs->getuserfoodtable($user);
+foreach($array as $data){
+    array_push($filenum,$data->data());
+}
+echo json_encode($filenum);
+}catch(PDOException $e){
+    $data=array("statues"=>"fail");
+    echo json_endode($data);
+}    
+});
+
 $app->run();
 ?>

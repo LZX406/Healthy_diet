@@ -40,9 +40,6 @@ echo json_encode($filenum);
 }    
 });
 
-
-
-
 $app->put('/{user}/{foodnum}/{foodname}/{foodcpg}/{gram}/{cookm}/{totalc}', function (Request $request, Response $response, array $args) {
     $user=$args['user'];
     $foodnum=$args['foodnum'];
