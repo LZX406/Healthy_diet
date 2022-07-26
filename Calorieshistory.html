@@ -224,10 +224,11 @@ class cal{
         
 
         var userc = [];
+        var xhr=new XMLHttpRequest();
         xhr.open('GET','https://localhost/Healthy_diet/service/getCalorieHistory.php/'+username,true);
         xhr.send();
         xhr.onload = function(){
-          caloriearray=JSON.parse(xhr.responseText);
+          var caloriearray=JSON.parse(xhr.responseText);
       console.log(caloriearray);
       caloriearray.forEach(
           userc.push(caloriearray)
@@ -245,6 +246,7 @@ class cal{
         var count=calnum;
         var totalcal;
         var createdcal;
+        var xhr1=new XMLHttpRequest();
         xhr1.open('GET','https://localhost/Healthy_diet/service/getCalorieHistory.php/'+username,true);
         xhr1.send();
         xhr1.onload = function(){

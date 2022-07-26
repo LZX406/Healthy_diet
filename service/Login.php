@@ -7,13 +7,12 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 require '../vendor/autoload.php';
 require_once 'GFirestore.php';
-phpinfo();
 $app = new \Slim\App;
 
 $app->get('/login/{user}', function (Request $request, Response $response, array $args) {
-    
+    $filenum=[];
     $user=$args['user'];
-    
+    $fs=new Firestore( collection: 'users');
 try{
 $array=$fs->getuser($user);
 foreach($array as $data){

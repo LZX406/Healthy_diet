@@ -58,8 +58,6 @@ echo "update successful";
 });
 //$response->getBody()->write("this is $place");
 //print_r($fs->getDocument(name:''))
-<<<<<<< HEAD
-=======
 
 $app->get('/', function (Request $request, Response $response, array $args) {
     $response->getBody()->write("this is the root directory.....");
@@ -84,6 +82,5 @@ echo json_encode($filenum);
 }    
 });
 
->>>>>>> mlb
 $app->run();
 ?>

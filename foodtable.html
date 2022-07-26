@@ -122,11 +122,6 @@
     </div>
     
       <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
-        const app=initializeApp(connect());
-        import{getFirestore,doc,getDoc,getDocs,setDoc,onSnapshot,collection,addDoc, updateDoc,deleteDoc,deleteField, orderBy, serverTimestamp, Timestamp}
-        from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js"
-        const db=getFirestore();
 
     //check session timeout
     if(localStorage.getItem("calorieusername"))

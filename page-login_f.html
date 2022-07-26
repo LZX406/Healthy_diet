@@ -98,18 +98,32 @@
         
         async function LoginData()
         {
-         var  userarray=[];
-        xhr.open('GET','https://localhost/Healthy_diet/service/login.php/'+username,true);
+        
+         const xhr=new XMLHttpRequest();
+        xhr.open('GET','https://localhost/Healthy_diet/service/Login.php/login/'+username,true);
         xhr.send();
         xhr.onload = function(){
-          userarray=JSON.parse(xhr.responseText);
+            var array=[];
+            var userarray=[];
+          array=JSON.parse(xhr.responseText);
+          console.log(username.value);
+          array.forEach(num=>{
+            if(num.username==username.value){
+                userarray=num;
+                console.log("matching");
+            }
+          });
           console.log(userarray);
-            if(userarray.exists())
+            if(userarray)
             {
                 
-                password = userarray.password,
-                name =userarray.name;
-                if((username.value == name) && (password.value == password))
+                var passwords = userarray.password;
+                var name =userarray.username;
+                console.log(passwords);
+                console.log(name);
+                console.log(password.value);
+                console.log(username.value);
+                if((username.value == name) && (password.value == passwords))
                 {
                     let obj = {
                         time: new Date().getTime(),
@@ -122,7 +136,7 @@
 
                 else
                 {
-                    alert("Username or password is wrong");
+                    alert("Username or password is wrong 3");
                 }
             }
             else

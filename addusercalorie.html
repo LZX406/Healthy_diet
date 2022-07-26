@@ -138,11 +138,7 @@
       </div>
       
       <script type="module" >
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
-        import{getFirestore,doc,getDoc,setDoc,getDocs,collection,addDoc, updateDoc,deleteDoc,deleteField}
-        from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js"
-        const app=initializeApp(connect());
-        const db=getFirestore();
+        
         //check session timeout
     if(localStorage.getItem("calorieusername"))
     { var currenttime=new Date().getTime();
@@ -160,7 +156,6 @@
       //get username
         var username=JSON.parse(localStorage.getItem("calorieusername")).value;
         
-      const getfood= await getDocs(collection(db, username, "Foodtable","Food"));
         document.getElementById("avatarname").innerHTML=username;
         
        
@@ -175,15 +170,6 @@
         var type;
         var typeindex;
         var usercalorie=0;
-<<<<<<< HEAD
-        var ref = doc(db,"users", username,"UserdailyCalorie","record");
-        var ref2=doc(db,"users", username);
-        const docSnap = await getDoc(ref);
-        const docSnap2= await getDoc(ref2);
-        if(docSnap.exists())
-            { 
-              if(docSnap2.data().Gender==document.getElementById("gender").options[0].text)
-=======
 
         //get userdailycalorie
         var xhr=new XMLHttpRequest();
@@ -231,7 +217,6 @@
             if(userprofile!=null)
             {
               if(userprofile['Gender']==document.getElementById("gender").options[0].text)
->>>>>>> mlb
               {
                 document.getElementById("gender").selectedIndex=0;
               }
@@ -239,27 +224,18 @@
               {
                 document.getElementById("gender").selectedIndex=1;
               }
-              age=parseInt(docSnap2.data().Age);
+              age=parseInt(userprofile['Age']);
               document.getElementById("age").value=age;
-              weight=parseInt(docSnap2.data().Weight);
+              weight=parseInt(userprofile['Weight']);
               document.getElementById("weight").value=weight;
-              height=parseInt(docSnap2.data().Height);
+              height=parseInt(userprofile['Height']);
               document.getElementById("height").value=height;
-              type=docSnap.data().ActivityType;
-              for(var i=0;i<3;i++)
-              {
-                if(type==document.getElementById("type").options[i].text)
-                {
-                  document.getElementById("type").selectedIndex=i;
-                }
-              }
-              usercalorie=parseFloat(docSnap.data().UserDailyCalorie);
-              document.getElementById("result").innerHTML=usercalorie+" Calorie per day";
-              document.getElementById("save").value="update record";
             }
-            else{
-              document.getElementById("savecondition").innerHTML="No user daily calorie record."
-            }
+            
+            
+        }
+        
+            
 
         var save=document.getElementById("save");
         save.addEventListener('click',saveusercalory);
@@ -327,28 +303,6 @@
         function saveusercalory()
         {document.getElementById("savecondition").innerHTML="Saving...";
           //store result to firebase
-<<<<<<< HEAD
-          setDoc(doc(db,"users", username),{
-            Age:age,
-            Height:height,
-            Weight:weight,
-            Gender:gender.value,
-            },{merge:true})
-            .then(()=>{
-              setDoc(ref,{
-            ActivityType:activitytext,
-            UserDailyCalorie:usercalorie
-            }).then(()=>{
-              document.getElementById("savecondition").innerHTML="User daily calorie save complete";
-            })
-            .catch((error)=>{
-                alert("error "+error);
-            });
-            })
-            .catch((error)=>{
-                alert("second error "+error);
-            });
-=======
           
           const xhr3 = new XMLHttpRequest();
           xhr3.open('PUT','https://localhost/Healthy_diet/service/addusercalorie.php/'+username+'/'+age+'/'+height+'/'+weight+'/'+gender.value,true);
@@ -364,7 +318,6 @@
         }
           }
           
->>>>>>> mlb
         }
 
 </script> 

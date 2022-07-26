@@ -238,6 +238,7 @@
 
             // var histref = collection(db, "users", username2, "Calorierecord");
             var calories = [];
+            var xhr=new XMLHttpRequest();
             xhr.open('GET','https://localhost/Healthy_diet/service/SelectExercise.php/'+username+'/caloriehistory',true);
             xhr.send();
             xhr.onload = function(){
@@ -266,9 +267,10 @@
             //         calories.push(doc.data().Totalcalorie);
             //     });
             var ucalorie;
-            xhr.open('GET','https://localhost/Healthy_diet/service/SelectExercise.php/'+username+'/record',true);
-            xhr.send();
-            xhr.onload = function(){
+            var xhr2=new XMLHttpRequest();
+            xhr2.open('GET','https://localhost/Healthy_diet/service/SelectExercise.php/'+username+'/record',true);
+            xhr2.send();
+            xhr2.onload = function(){
             record=JSON.parse(xhr.responseText);
             if (record.exists()){
                   ucalorie = docSnap.data().UserDailyCalorie;

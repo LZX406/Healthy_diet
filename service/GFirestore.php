@@ -27,11 +27,6 @@ class Firestore
         return $this->db->collection($this->name)->document($name)-> collection('BMI Value')->document($id)->snapshot()->data();
     }
 
-    public function getusercalorierecord(string $name)
-    {
-        return $this->db->collection($this->name)->document($name)->collection('Calorierecord')->documents()->rows();
-    }
-
     public function setprofileage(string $name,Array $data)
     {
         return $this->db->collection($this->name)->document($name)->set($data, ['merge'=> true ]);
@@ -52,11 +47,7 @@ class Firestore
     {
         return $this->db->collection($this->name)->document($name)->collection('BMI Value')->documents()->rows();
     }
-    public function getusercaloriehistory(string $name)
-    {
-        
-        return $this->db->collection($this->name)->document($name)->collection('Calorierecord')->documents();  
-    }
+    
     public function updateusercalorietable(string $name,string $num,Array $data)
     {
         
@@ -66,14 +57,81 @@ class Firestore
     {
         $this->db->collection($this->name)->document($name)->collection('Calorierecord')->document($num)->delete();
     }
-    public function getuser(string $name)
-    {
-        
-        return $this->db->collection('users')->document($name)->documents();  
-    }
+    
     public function getuserrecord(string $name)
     {
         
         return $this->db->collection($this->name)->document($name)->collection('record')->documents();  
     }
+    public function getname()
+    {
+        return $this->$name;
+    }
+
+    public function getusercalorierecord(string $name,string $record)
+    {
+        
+        return $this->db->collection($this->name)->document($name)->collection('UserdailyCalorie')->document($record)->snapshot()->data();  
+    }
+    public function getuserprofilerecord(string $name)
+    {
+        
+        return $this->db->collection($this->name)->document($name)->snapshot()->data();  
+    }
+   
+    public function setuserprofile(string $name,Array $data,)
+    {
+        $this->db->collection($this->name)->document($name)->set($data, ['merge'=> true ]);
+    }
+    public function setuserdailycalorie(string $name,Array $data,)
+    {
+        $this->db->collection($this->name)->document($name)->collection('UserdailyCalorie')->document('record')->set($data, ['merge'=> true ]);
+    }
+    public function getuserfoodtable(string $name)
+    {
+        
+        return $this->db->collection($this->name)->document($name)->collection('FoodTable')->documents();  
+    }
+    public function adduserfoodtable(string $name,string $num,Array $data)
+    {
+        
+        $this->db->collection($this->name)->document($name)->collection('FoodTable')->document($num)->set($data);  
+    }
+    public function updateuserfoodtable(string $name,string $num,Array $data)
+    {
+        
+        $this->db->collection($this->name)->document($name)->collection('FoodTable')->document($num)->set($data);  
+    }
+    public function getuserfoodcalorierecord(string $name)
+    {
+        
+        return $this->db->collection($this->name)->document($name)->collection('Calorierecord')->documents();  
+    }
+    public function adduserfoodcalorierecord(string $name,string $num,Array $data)
+    {
+        
+        $this->db->collection($this->name)->document($name)->collection('Calorierecord')->document($num)->set($data);  
+    }
+    public function deleteuserallfoodtable(string $name,string $num)
+    {
+        $this->db->collection($this->name)->document($name)->collection('FoodTable')->document($num)->delete();
+    }
+    public function getuserfood(string $name,string $num)
+    {
+        
+        return $this->db->collection($this->name)->document($name)->collection('FoodTable')->document($num)->snapshot()->data();  
+    }
+
+    public function getusercaloriehistory(string $name)
+    {
+        
+        return $this->db->collection($this->name)->document($name)->collection('Calorierecord')->documents();  
+    }
+   
+    public function getuser(string $name)
+    {
+        
+        return $this->db->collection($this->name)->documents();  
+    }
+    
 }
