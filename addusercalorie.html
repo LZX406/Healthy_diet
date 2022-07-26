@@ -174,11 +174,7 @@
         //get userdailycalorie
         var xhr=new XMLHttpRequest();
         //step2
-<<<<<<< HEAD
         xhr.open("get",'https://localhost/Healthy_diet/service/addusercalorie.php/'+username+'/record',true);
-=======
-        xhr.open("get",'service/addusercalorie.php/'+username+'/record',true);
->>>>>>> master
         //step3
         xhr.send();
         //step4
@@ -209,11 +205,7 @@
         //get user weight,height, gender, age
         var xhr2=new XMLHttpRequest();
         //step2
-<<<<<<< HEAD
         xhr2.open("get",'https://localhost/Healthy_diet/service/addusercalorie.php/'+username,true);
-=======
-        xhr2.open("get",'service/addusercalorie.php/'+username,true);
->>>>>>> master
         //step3
         xhr2.send();
         //step4
@@ -313,20 +305,12 @@
           //store result to firebase
           
           const xhr3 = new XMLHttpRequest();
-<<<<<<< HEAD
           xhr3.open('PUT','https://localhost/Healthy_diet/service/addusercalorie.php/'+username+'/'+age+'/'+height+'/'+weight+'/'+gender.value,true);
-=======
-          xhr3.open('PUT','service/addusercalorie.php/'+username+'/'+age+'/'+height+'/'+weight+'/'+gender.value,true);
->>>>>>> master
           xhr3.send();
           xhr3.onload = function(){
         //console.log(xhr3.responseText);
         const xhr4 = new XMLHttpRequest();
-<<<<<<< HEAD
         xhr4.open('PUT','https://localhost/Healthy_diet/service/addusercalorie.php/'+username+'/'+activitytext+'/'+usercalorie,true);
-=======
-        xhr4.open('PUT','service/addusercalorie.php/'+username+'/'+activitytext+'/'+usercalorie,true);
->>>>>>> master
         xhr4.send();
         xhr4.onload = function(){
       //console.log(xhr4.responseText);

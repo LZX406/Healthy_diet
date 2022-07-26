@@ -215,11 +215,7 @@
         var array;
         var foodarray=[];
         const xhr = new XMLHttpRequest();
-<<<<<<< HEAD
         xhr.open('GET','https://localhost/Healthy_diet/service/foodtable.php/'+username+'/table',true);
-=======
-        xhr.open('GET','service/foodtable.php/'+username+'/table',true);
->>>>>>> master
         xhr.send();
         xhr.onload = function(){
       //console.log(xhr3.responseText);
@@ -338,11 +334,7 @@
   async function displayCalorie(){
   var foodnum=0;    
   const xhr2 = new XMLHttpRequest();
-<<<<<<< HEAD
           xhr2.open('GET','https://localhost/Healthy_diet/service/foodtable.php/'+username,true);
-=======
-          xhr2.open('GET','service/foodtable.php/'+username,true);
->>>>>>> master
           xhr2.send();
           xhr2.onload = function(){
         //console.log(xhr3.responseText);
@@ -350,11 +342,7 @@
         foodnum+=1;
         console.log(foodnum);
           const xhr3 = new XMLHttpRequest();
-<<<<<<< HEAD
         xhr3.open('POST','https://localhost/Healthy_diet/service/foodtable.php/'+username+'/'+foodnum+'/'+allfoodtotalc.toFixed(2),true);
-=======
-        xhr3.open('POST','service/foodtable.php/'+username+'/'+foodnum+'/'+allfoodtotalc.toFixed(2),true);
->>>>>>> master
         xhr3.send();
         xhr3.onload = function(){
       //console.log(xhr3.responseText);
@@ -377,11 +365,7 @@
     if(confirm("Delete all the food in the list?"))
     {
       const xhr4 = new XMLHttpRequest();
-<<<<<<< HEAD
         xhr4.open('DELETE','https://localhost/Healthy_diet/service/foodtable.php/'+username+'/delete',true);
-=======
-        xhr4.open('DELETE','service/foodtable.php/'+username+'/delete',true);
->>>>>>> master
         xhr4.send();
         xhr4.onload = function(){
       //console.log(xhr4.responseText);

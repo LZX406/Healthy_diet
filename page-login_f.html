@@ -93,7 +93,6 @@
         let password = document.getElementById("Password");
 
         // Funtion for user login
-<<<<<<< HEAD
 
 
         
@@ -111,16 +110,6 @@
                 password = userarray.password,
                 name =userarray.name;
                 if((username.value == name) && (password.value == password))
-=======
-        async function LoginData()
-        {
-            var ref = doc(db,"users", username.value);
-            const docSnap = await getDoc(ref);
-
-            if(docSnap.exists())
-            {
-                if((username.value == docSnap.data().username) && (password.value == docSnap.data().password))
->>>>>>> master
                 {
                     let obj = {
                         time: new Date().getTime(),
@@ -135,7 +124,6 @@
                 {
                     alert("Username or password is wrong");
                 }
-<<<<<<< HEAD
             }
             else
             {
@@ -143,15 +131,6 @@
             }
         }
             
-=======
-                
-            }
-
-            else{
-                alert("Username or password is wrong");
-            }
-
->>>>>>> master
         }
 
         function validate()

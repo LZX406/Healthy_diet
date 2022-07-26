@@ -2,13 +2,8 @@
 header('Access-Control-Allow-Origin: *' );
 header("Content-Type: application/json; charset=UTF-8");
 header('Access-Control-Allow-Headers: *' );
-<<<<<<< HEAD
-require_once '../vendor/autoload.php';
-use Google\Cloud\Firestore\FirestoreClient;
-=======
 use Google\Cloud\Firestore\FirestoreClient;
 
->>>>>>> master
 class Firestore
 {
     protected $db;
@@ -104,7 +99,6 @@ class Firestore
         
         return $this->db->collection($this->name)->document($name)->collection('FoodTable')->document($num)->snapshot()->data();  
     }
-<<<<<<< HEAD
     public function getusercaloriehistory(string $name)
     {
         
@@ -129,6 +123,4 @@ class Firestore
         
         return $this->db->collection($this->name)->document($name)->collection('record')->documents();  
     }
-=======
->>>>>>> master
 }

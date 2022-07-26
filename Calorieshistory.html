@@ -149,11 +149,7 @@ class cal{
       //filling the table
       var ucNo = 0;
       var tbody = document.getElementById('tbody1');
-<<<<<<< HEAD
       
-=======
-      //const getcal=doc(db,"users", username,'FoodTable',calnum);
->>>>>>> master
       var Totalcal;
       var Createcal;
       var calno;
@@ -223,7 +219,6 @@ class cal{
         document.getElementById("avatarname").innerHTML=username;
         
       //getting all data
-<<<<<<< HEAD
       
       async function GetAllDataOnce(){
         
@@ -241,18 +236,6 @@ class cal{
         AddAllItemsToTable(userc);
       }
     }
-=======
-      async function GetAllDataOnce(){
-        const querySnapshot = await getDocs(collection(db,"users", username,"Calorierecord"));
-
-        var userc = [];
-        
-        querySnapshot.forEach(doc => {
-          userc.push(doc.data());
-        });
-        AddAllItemsToTable(userc);
-      }
->>>>>>> master
 
       //delete data
       async function replace(calnum){
@@ -262,17 +245,12 @@ class cal{
         var count=calnum;
         var totalcal;
         var createdcal;
-<<<<<<< HEAD
         xhr1.open('GET','https://localhost/Healthy_diet/service/getCalorieHistory.php/'+username,true);
         xhr1.send();
         xhr1.onload = function(){
           getcal=JSON.parse(xhr.responseText);
         getcal.forEach(
    num=>{
-=======
-        var getcal=await getDocs(collection(db,"users", username,'Calorierecord'));
-        getcal.forEach(num=>{
->>>>>>> master
         if(parseInt(num.data().CalNo) > parseInt(calnum))
         { 
           calno=(num.data().CalNo-1);
@@ -282,7 +260,6 @@ class cal{
           count++;
         }
         });
-<<<<<<< HEAD
       }
         for(var index=1;index<calarray.length;index++)
       {     
@@ -305,26 +282,6 @@ class cal{
         xhr3.onerror= function(error){
           alert( error );
         }
-=======
-        for(var index=1;index<calarray.length;index++)
-      {     
-            setDoc( doc(db,"users", username,'Calorierecord',(calarray[index].no).toString()),{
-            CalNo:parseInt(calarray[index].no),
-            Totalcalorie:calarray[index].totalc,
-            createdAt:calarray[index].date,
-            })
-            .catch((error)=>{
-            alert("error "+error);
-            });
-        }
-        deleteDoc(doc(db,"users", username,"Calorierecord",count.toString()))
-        .then(()=>{
-        window.location.href="Calorieshistory.html";
-        })
-        .catch((error)=>{
-                alert("error "+error);
-        });
->>>>>>> master
       }
 
       

@@ -1,12 +1,8 @@
 {
     "require": {
         "slim/slim": "^3.0",
-<<<<<<< HEAD
-        "google/cloud-firestore": "^1.24"
-=======
         "google/cloud-firestore": "^1.24",
         "grpc/grpc": "1.42",
         "google/protobuf": "3.21.3"
->>>>>>> master
     }
 }
