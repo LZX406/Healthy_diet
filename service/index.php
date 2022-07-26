@@ -58,5 +58,32 @@ echo "update successful";
 });
 //$response->getBody()->write("this is $place");
 //print_r($fs->getDocument(name:''))
+<<<<<<< HEAD
+=======
+
+$app->get('/', function (Request $request, Response $response, array $args) {
+    $response->getBody()->write("this is the root directory.....");
+
+    return $response;
+});
+
+$app->get('/{user}/table', function (Request $request, Response $response, array $args) {
+    $user=$args['user'];
+    $fs=new Firestore( collection: 'users');
+    
+try{
+    $filenum=[];
+$array=$fs->getuserfoodtable($user);
+foreach($array as $data){
+    array_push($filenum,$data->data());
+}
+echo json_encode($filenum);
+}catch(PDOException $e){
+    $data=array("statues"=>"fail");
+    echo json_endode($data);
+}    
+});
+
+>>>>>>> mlb
 $app->run();
 ?>

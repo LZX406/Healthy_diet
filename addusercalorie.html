@@ -175,6 +175,7 @@
         var type;
         var typeindex;
         var usercalorie=0;
+<<<<<<< HEAD
         var ref = doc(db,"users", username,"UserdailyCalorie","record");
         var ref2=doc(db,"users", username);
         const docSnap = await getDoc(ref);
@@ -182,6 +183,55 @@
         if(docSnap.exists())
             { 
               if(docSnap2.data().Gender==document.getElementById("gender").options[0].text)
+=======
+
+        //get userdailycalorie
+        var xhr=new XMLHttpRequest();
+        //step2
+        xhr.open("get",'https://localhost/Healthy_diet/service/addusercalorie.php/'+username+'/record',true);
+        //step3
+        xhr.send();
+        //step4
+        xhr.onload=function(){
+            console.log(xhr.responseText);
+            try{
+            var userdailycalorie=JSON.parse(xhr.responseText);
+            console.log(userdailycalorie);
+            
+              usercalorie=parseFloat(userdailycalorie['UserDailyCalorie']);
+              document.getElementById("result").innerHTML=usercalorie+" Calorie per day";
+              document.getElementById("save").value="update record";
+              type=userdailycalorie['ActivityType'];
+              for(var i=0;i<3;i++)
+              {
+                if(type==document.getElementById("type").options[i].text)
+                {
+                  document.getElementById("type").selectedIndex=i;
+                }
+              }
+            }
+            catch(err){
+              document.getElementById("savecondition").innerHTML="No user daily calorie record."
+            }
+            
+        }
+
+        //get user weight,height, gender, age
+        var xhr2=new XMLHttpRequest();
+        //step2
+        xhr2.open("get",'https://localhost/Healthy_diet/service/addusercalorie.php/'+username,true);
+        //step3
+        xhr2.send();
+        //step4
+        xhr2.onload=function(){
+            console.log(xhr2.responseText);
+            //document.getElementById("userdata").innerHTML=xhr.responseText;
+            var userprofile=JSON.parse(xhr2.responseText);
+            console.log(userprofile);
+            if(userprofile!=null)
+            {
+              if(userprofile['Gender']==document.getElementById("gender").options[0].text)
+>>>>>>> mlb
               {
                 document.getElementById("gender").selectedIndex=0;
               }
@@ -277,6 +327,7 @@
         function saveusercalory()
         {document.getElementById("savecondition").innerHTML="Saving...";
           //store result to firebase
+<<<<<<< HEAD
           setDoc(doc(db,"users", username),{
             Age:age,
             Height:height,
@@ -297,6 +348,23 @@
             .catch((error)=>{
                 alert("second error "+error);
             });
+=======
+          
+          const xhr3 = new XMLHttpRequest();
+          xhr3.open('PUT','https://localhost/Healthy_diet/service/addusercalorie.php/'+username+'/'+age+'/'+height+'/'+weight+'/'+gender.value,true);
+          xhr3.send();
+          xhr3.onload = function(){
+        //console.log(xhr3.responseText);
+        const xhr4 = new XMLHttpRequest();
+        xhr4.open('PUT','https://localhost/Healthy_diet/service/addusercalorie.php/'+username+'/'+activitytext+'/'+usercalorie,true);
+        xhr4.send();
+        xhr4.onload = function(){
+      //console.log(xhr4.responseText);
+      document.getElementById("savecondition").innerHTML="User daily calorie save complete";
+        }
+          }
+          
+>>>>>>> mlb
         }
 
 </script> 

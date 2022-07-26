@@ -149,7 +149,7 @@ class cal{
       //filling the table
       var ucNo = 0;
       var tbody = document.getElementById('tbody1');
-      //const getcal=doc(db,"users", username,'FoodTable',calnum);
+      
       var Totalcal;
       var Createcal;
       var calno;
@@ -219,16 +219,23 @@ class cal{
         document.getElementById("avatarname").innerHTML=username;
         
       //getting all data
+      
       async function GetAllDataOnce(){
-        const querySnapshot = await getDocs(collection(db,"users", username,"Calorierecord"));
+        
 
         var userc = [];
-        
-        querySnapshot.forEach(doc => {
-          userc.push(doc.data());
-        });
+        xhr.open('GET','https://localhost/Healthy_diet/service/getCalorieHistory.php/'+username,true);
+        xhr.send();
+        xhr.onload = function(){
+          caloriearray=JSON.parse(xhr.responseText);
+      console.log(caloriearray);
+      caloriearray.forEach(
+          userc.push(caloriearray)
+      )
+
         AddAllItemsToTable(userc);
       }
+    }
 
       //delete data
       async function replace(calnum){
@@ -238,8 +245,12 @@ class cal{
         var count=calnum;
         var totalcal;
         var createdcal;
-        var getcal=await getDocs(collection(db,"users", username,'Calorierecord'));
-        getcal.forEach(num=>{
+        xhr1.open('GET','https://localhost/Healthy_diet/service/getCalorieHistory.php/'+username,true);
+        xhr1.send();
+        xhr1.onload = function(){
+          getcal=JSON.parse(xhr.responseText);
+        getcal.forEach(
+   num=>{
         if(parseInt(num.data().CalNo) > parseInt(calnum))
         { 
           calno=(num.data().CalNo-1);
@@ -249,24 +260,28 @@ class cal{
           count++;
         }
         });
+      }
         for(var index=1;index<calarray.length;index++)
       {     
-            setDoc( doc(db,"users", username,'Calorierecord',(calarray[index].no).toString()),{
-            CalNo:parseInt(calarray[index].no),
-            Totalcalorie:calarray[index].totalc,
-            createdAt:calarray[index].date,
-            })
-            .catch((error)=>{
-            alert("error "+error);
-            });
+
+            
+            const xhr2 = new XMLHttpRequest();
+            xhr2.open('PUT','https://localhost/Healthy_diet/service/getCalorieHistory.php/'+username+'/'+(calarray[index].no).toString()+'/'+(parseFloat(calarray[index].totalc)).toFixed(2)+'/'+calarray[index].date,true);
+            xhr2.send();
+            xhr2.onerror= function(error){
+          alert( error );
         }
-        deleteDoc(doc(db,"users", username,"Calorierecord",count.toString()))
-        .then(()=>{
-        window.location.href="Calorieshistory.html";
-        })
-        .catch((error)=>{
-                alert("error "+error);
-        });
+        }
+        
+        const xhr3 = new XMLHttpRequest();
+        xhr3.open('DELETE','https://localhost/Healthy_diet/service/getCalorieHistory.php/'+username+'/'+count,true);
+        xhr3.send();
+        xhr3.onload = function(){
+          window.location.href="foodtable.html";
+        }
+        xhr3.onerror= function(error){
+          alert( error );
+        }
       }
 
       

@@ -192,38 +192,38 @@
 
 //----------------------------Adding Document---------------------------------//
 
-        async function AddDocument_AutoID(){
-            var ref = collection(db, "users");
+        // async function AddDocument_AutoID(){
+        //     var ref = collection(db, "users");
 
-            const docRef = await addDoc(
-                ref, {
-                    NameOfStd: Namebox.value
-                }
-            )
-            .then(()=>{
-                alert("data added successfully");
-            })
-            .catch((error) =>{
-                alert("Unsuccessful operation, error:" + error);
-            });
-            console.log("document id is "+docRef.id);
-        }
+        //     const docRef = await addDoc(
+        //         ref, {
+        //             NameOfStd: Namebox.value
+        //         }
+        //     )
+        //     .then(()=>{
+        //         alert("data added successfully");
+        //     })
+        //     .catch((error) =>{
+        //         alert("Unsuccessful operation, error:" + error);
+        //     });
+        //     console.log("document id is "+docRef.id);
+        // }
 
-        async function AddDocument_CustomID(){
-            var ref = collection(db, "users", RollBox.value);
+        // async function AddDocument_CustomID(){
+        //     var ref = collection(db, "users", RollBox.value);
 
-            await setDoc(
-                ref, {
-                    NameOfStd: Namebox.value
-                }
-            )
-            .then(()=>{
-                alert("data added successfully");
-            })
-            .catch((error) =>{
-                alert("Unsuccessful operation, error:" + error);
-            });
-        }
+        //     await setDoc(
+        //         ref, {
+        //             NameOfStd: Namebox.value
+        //         }
+        //     )
+        //     .then(()=>{
+        //         alert("data added successfully");
+        //     })
+        //     .catch((error) =>{
+        //         alert("Unsuccessful operation, error:" + error);
+        //     });
+        // }
 
 //----------------------------Getting a Doc-----------------------------------//
 
@@ -236,33 +236,55 @@
 
             let today = Timestamp.fromDate(pretoday);
 
-            var histref = collection(db, "users", username2, "Calorierecord");
+            // var histref = collection(db, "users", username2, "Calorierecord");
+            var calories = [];
+            xhr.open('GET','https://localhost/Healthy_diet/service/SelectExercise.php/'+username+'/caloriehistory',true);
+            xhr.send();
+            xhr.onload = function(){
+            caloriearray=JSON.parse(xhr.responseText);
+              for( i=0;i<caloriearray.length;i++)
+              {
+                if(caloriearray.createdAt > today)
+                {
+                  calories.push(doc.data().Totalcalorie);
+                }
+              }
+              
+            }
 
-            var ucref = doc(db, "users", username2, "UserdailyCalorie", "record");
+            // const q = query(histref, where("createdAt", ">", today));
 
-            const q = query(histref, where("createdAt", ">", today));
-
-            const r = query(ucref);
-
-            const querySnapshot = await getDocs(q);
-
-                //Calculate total calorie 
-                var calories = [];
-
-                querySnapshot.forEach(doc => {
-                    calories.push(doc.data().Totalcalorie);
-                });
             
-                const docSnap = await getDoc(r);
+            
 
-                //Calculate total calorie 
-                var ucalorie;
+            // const querySnapshot = await getDocs(q);
 
-                if (docSnap.exists()){
+            //     //Calculate total calorie 
+            //     var calories = [];
+
+            //     querySnapshot.forEach(doc => {
+            //         calories.push(doc.data().Totalcalorie);
+            //     });
+            var ucalorie;
+            xhr.open('GET','https://localhost/Healthy_diet/service/SelectExercise.php/'+username+'/record',true);
+            xhr.send();
+            xhr.onload = function(){
+            record=JSON.parse(xhr.responseText);
+            if (record.exists()){
                   ucalorie = docSnap.data().UserDailyCalorie;
                 } else {
                   console.log("No such document!");
                 }
+              
+            }
+            // var ucref = doc(db, "users", username2, "UserdailyCalorie", "record");
+            // // const r = query(ucref);
+            //     const docSnap = await getDoc(r);
+
+                //Calculate total calorie 
+                
+
+                
                 
                 AddCalories(calories, ucalorie);
                 Caloriebox.value = ucalorie;
@@ -278,41 +300,41 @@
 
 //----------------------------Updating a Doc----------------------------------//
 
-         async function UpdateDoc(){
-            var ref = collection(db, "users", RollBox.value);
+//          async function UpdateDoc(){
+//             var ref = collection(db, "users", RollBox.value);
 
-            await updateDoc(
-                ref, {
-                    NameOfStd: Namebox.value
-                }
-            )
-            .then(()=>{
-                alert("data updated successfully");
-            })
-            .catch((error) =>{
-                alert("Unsuccessful operation, error:" + error);
-            });
-        }
+//             await updateDoc(
+//                 ref, {
+//                     NameOfStd: Namebox.value
+//                 }
+//             )
+//             .then(()=>{
+//                 alert("data updated successfully");
+//             })
+//             .catch((error) =>{
+//                 alert("Unsuccessful operation, error:" + error);
+//             });
+//         }
 
-//----------------------------Deleting a Doc----------------------------------//
+// //----------------------------Deleting a Doc----------------------------------//
 
-        async function DeleteDoctument(){
-            var ref = doc(db, "users", Rollbox.value);
-            const docSnap = await getDoc(ref);
+//         async function DeleteDoctument(){
+//             var ref = doc(db, "users", Rollbox.value);
+//             const docSnap = await getDoc(ref);
 
-            if(!docSnap.exists()){
-                alert("Document does not exist");
-                return;
-            }
+//             if(!docSnap.exists()){
+//                 alert("Document does not exist");
+//                 return;
+//             }
 
-            await deleteDoc(ref)
-            .then(()=>{
-                alert("data deleted successfully");
-            })
-            .catch((error)=>{
-                alert("Unsuccessful operation, error:"+ error);
-            });
-        }
+//             await deleteDoc(ref)
+//             .then(()=>{
+//                 alert("data deleted successfully");
+//             })
+//             .catch((error)=>{
+//                 alert("Unsuccessful operation, error:"+ error);
+//             });
+//         }
 
 //----------------------------Filling the Table-------------------------------//
 

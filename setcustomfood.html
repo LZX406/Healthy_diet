@@ -137,7 +137,23 @@
 
         document.getElementById("avatarname").innerHTML=username;
 
+<<<<<<< HEAD
         const getfood= await getDocs(collection(db,"users", username,"FoodTable"));
+=======
+        const xhr = new XMLHttpRequest();
+          xhr.open('GET','https://localhost/Healthy_diet/service/setcustomfood.php/'+username,true);
+          xhr.send();
+          xhr.onload = function(){
+        //console.log(xhr3.responseText);
+        try{
+        foodnum=JSON.parse(xhr.responseText);
+        foodnum+=1;
+        }
+        catch(err){
+          foodnum=1;
+        }
+          }
+>>>>>>> mlb
     
         var table=document.getElementById("table");
         table.border="3px; solid black";
@@ -250,6 +266,7 @@ var tr=table.insertRow();
         var cookvalue=cmethod.options[cmethod.selectedIndex].value;
         var totalc=foodcpg*gram*cookvalue;
         if(gram)
+<<<<<<< HEAD
         {var foodnum=0;
         getfood.forEach(doc=>{foodnum+=1});
           setDoc(doc(db,"users", username,"FoodTable",(foodnum+=1).toString()),{
@@ -267,6 +284,21 @@ var tr=table.insertRow();
                 alert("error "+error);
             });
         
+=======
+        {
+          
+        const xhr2 = new XMLHttpRequest();
+        xhr2.open('POST','https://localhost/Healthy_diet/service/setcustomfood.php/'+username+'/'+foodnum+'/'+foodname+'/'+foodcpg+'/'+gram+'/'+cookm+'/'+totalc.toFixed(2),true);
+        xhr2.send();
+        xhr2.onload = function(){
+      //console.log(xhr2.responseText);
+      window.location.href="foodtable.html";
+        }
+        xhr2.onerror= function(error){
+          alert( error );
+        }
+          
+>>>>>>> mlb
         }
         else {
           alert("gram value must enter");

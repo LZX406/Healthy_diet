@@ -93,14 +93,23 @@
         let password = document.getElementById("Password");
 
         // Funtion for user login
+
+
+        
         async function LoginData()
         {
-            var ref = doc(db,"users", username.value);
-            const docSnap = await getDoc(ref);
-
-            if(docSnap.exists())
+         var  userarray=[];
+        xhr.open('GET','https://localhost/Healthy_diet/service/login.php/'+username,true);
+        xhr.send();
+        xhr.onload = function(){
+          userarray=JSON.parse(xhr.responseText);
+          console.log(userarray);
+            if(userarray.exists())
             {
-                if((username.value == docSnap.data().username) && (password.value == docSnap.data().password))
+                
+                password = userarray.password,
+                name =userarray.name;
+                if((username.value == name) && (password.value == password))
                 {
                     let obj = {
                         time: new Date().getTime(),
@@ -115,13 +124,13 @@
                 {
                     alert("Username or password is wrong");
                 }
-                
             }
-
-            else{
+            else
+            {
                 alert("Username or password is wrong");
             }
-
+        }
+            
         }
 
         function validate()

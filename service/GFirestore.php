@@ -52,4 +52,28 @@ class Firestore
     {
         return $this->db->collection($this->name)->document($name)->collection('BMI Value')->documents()->rows();
     }
+    public function getusercaloriehistory(string $name)
+    {
+        
+        return $this->db->collection($this->name)->document($name)->collection('Calorierecord')->documents();  
+    }
+    public function updateusercalorietable(string $name,string $num,Array $data)
+    {
+        
+        $this->db->collection($this->name)->document($name)->collection('Calorierecord')->document($num)->set($data);  
+    }
+    public function deleteusercalorie(string $name,string $num)
+    {
+        $this->db->collection($this->name)->document($name)->collection('Calorierecord')->document($num)->delete();
+    }
+    public function getuser(string $name)
+    {
+        
+        return $this->db->collection('users')->document($name)->documents();  
+    }
+    public function getuserrecord(string $name)
+    {
+        
+        return $this->db->collection($this->name)->document($name)->collection('record')->documents();  
+    }
 }
