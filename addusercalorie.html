@@ -138,7 +138,11 @@
       </div>
       
       <script type="module" >
-        
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+        import{getFirestore,doc,getDoc,setDoc,getDocs,collection,addDoc, updateDoc,deleteDoc,deleteField}
+        from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js"
+        const app=initializeApp(connect());
+        const db=getFirestore();
         //check session timeout
     if(localStorage.getItem("calorieusername"))
     { var currenttime=new Date().getTime();
@@ -156,6 +160,7 @@
       //get username
         var username=JSON.parse(localStorage.getItem("calorieusername")).value;
         
+      const getfood= await getDocs(collection(db, username, "Foodtable","Food"));
         document.getElementById("avatarname").innerHTML=username;
         
        
@@ -170,53 +175,13 @@
         var type;
         var typeindex;
         var usercalorie=0;
-
-        //get userdailycalorie
-        var xhr=new XMLHttpRequest();
-        //step2
-        xhr.open("get",'service/addusercalorie.php/'+username+'/record',true);
-        //step3
-        xhr.send();
-        //step4
-        xhr.onload=function(){
-            console.log(xhr.responseText);
-            try{
-            var userdailycalorie=JSON.parse(xhr.responseText);
-            console.log(userdailycalorie);
-            
-              usercalorie=parseFloat(userdailycalorie['UserDailyCalorie']);
-              document.getElementById("result").innerHTML=usercalorie+" Calorie per day";
-              document.getElementById("save").value="update record";
-              type=userdailycalorie['ActivityType'];
-              for(var i=0;i<3;i++)
-              {
-                if(type==document.getElementById("type").options[i].text)
-                {
-                  document.getElementById("type").selectedIndex=i;
-                }
-              }
-            }
-            catch(err){
-              document.getElementById("savecondition").innerHTML="No user daily calorie record."
-            }
-            
-        }
-
-        //get user weight,height, gender, age
-        var xhr2=new XMLHttpRequest();
-        //step2
-        xhr2.open("get",'service/addusercalorie.php/'+username,true);
-        //step3
-        xhr2.send();
-        //step4
-        xhr2.onload=function(){
-            console.log(xhr2.responseText);
-            //document.getElementById("userdata").innerHTML=xhr.responseText;
-            var userprofile=JSON.parse(xhr2.responseText);
-            console.log(userprofile);
-            if(userprofile!=null)
-            {
-              if(userprofile['Gender']==document.getElementById("gender").options[0].text)
+        var ref = doc(db,"users", username,"UserdailyCalorie","record");
+        var ref2=doc(db,"users", username);
+        const docSnap = await getDoc(ref);
+        const docSnap2= await getDoc(ref2);
+        if(docSnap.exists())
+            { 
+              if(docSnap2.data().Gender==document.getElementById("gender").options[0].text)
               {
                 document.getElementById("gender").selectedIndex=0;
               }
@@ -224,18 +189,27 @@
               {
                 document.getElementById("gender").selectedIndex=1;
               }
-              age=parseInt(userprofile['Age']);
+              age=parseInt(docSnap2.data().Age);
               document.getElementById("age").value=age;
-              weight=parseInt(userprofile['Weight']);
+              weight=parseInt(docSnap2.data().Weight);
               document.getElementById("weight").value=weight;
-              height=parseInt(userprofile['Height']);
+              height=parseInt(docSnap2.data().Height);
               document.getElementById("height").value=height;
+              type=docSnap.data().ActivityType;
+              for(var i=0;i<3;i++)
+              {
+                if(type==document.getElementById("type").options[i].text)
+                {
+                  document.getElementById("type").selectedIndex=i;
+                }
+              }
+              usercalorie=parseFloat(docSnap.data().UserDailyCalorie);
+              document.getElementById("result").innerHTML=usercalorie+" Calorie per day";
+              document.getElementById("save").value="update record";
             }
-            
-            
-        }
-        
-            
+            else{
+              document.getElementById("savecondition").innerHTML="No user daily calorie record."
+            }
 
         var save=document.getElementById("save");
         save.addEventListener('click',saveusercalory);
@@ -303,21 +277,26 @@
         function saveusercalory()
         {document.getElementById("savecondition").innerHTML="Saving...";
           //store result to firebase
-          
-          const xhr3 = new XMLHttpRequest();
-          xhr3.open('PUT','service/addusercalorie.php/'+username+'/'+age+'/'+height+'/'+weight+'/'+gender.value,true);
-          xhr3.send();
-          xhr3.onload = function(){
-        //console.log(xhr3.responseText);
-        const xhr4 = new XMLHttpRequest();
-        xhr4.open('PUT','service/addusercalorie.php/'+username+'/'+activitytext+'/'+usercalorie,true);
-        xhr4.send();
-        xhr4.onload = function(){
-      //console.log(xhr4.responseText);
-      document.getElementById("savecondition").innerHTML="User daily calorie save complete";
-        }
-          }
-          
+          setDoc(doc(db,"users", username),{
+            Age:age,
+            Height:height,
+            Weight:weight,
+            Gender:gender.value,
+            },{merge:true})
+            .then(()=>{
+              setDoc(ref,{
+            ActivityType:activitytext,
+            UserDailyCalorie:usercalorie
+            }).then(()=>{
+              document.getElementById("savecondition").innerHTML="User daily calorie save complete";
+            })
+            .catch((error)=>{
+                alert("error "+error);
+            });
+            })
+            .catch((error)=>{
+                alert("second error "+error);
+            });
         }
 
 </script> 

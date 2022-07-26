@@ -34,7 +34,7 @@
 <script>
 
 function returnpage(){
-    window.location.href="index.html";
+    window.location.href="page-login_f.html";
         }
 
     function showPass(){
@@ -61,27 +61,28 @@ function returnpage(){
                         </div>
                             <h4>Register</h4>
 
+                            <form class="edit" id="">
                                 <!-- Username -->
                                 <div class="form-group">
                                     <p>Username</p>
-                                    <input type="text" class="form-control" id="Username">
+                                    <input type="text" class="form-control" id="Username" name="username" required>
                                 </div><br>
 
                                 <!-- Email -->
                                 <div class="form-group">
                                     <p>Email</p>
-                                    <input type="email" class="form-control" id="Email">
+                                    <input type="email" class="form-control" id="Email" name="email" required>
                                 </div><br>
 
                                 <!-- Password -->
                                 <div class="form-group">
                                     <p>Password</p>
-                                    <input type="password" class="form-control" id="Password"  required>
+                                    <input type="password" class="form-control" id="Password" name="password" required>
                                 </div><br>
                                 
                                 <div class = "form">
                                     <p>Confirm password</p>
-                                    <input type="password" class="form-control" id="confirm_Password"  required>
+                                    <input type="password" class="form-control" id="confirm_Password" name="confirm_Password" required>
                                 </div>
 
                                 <br>
@@ -90,6 +91,7 @@ function returnpage(){
                                 
                                 <!-- Register button -->
                                 <button class="coor" id="Register">Register</button>
+                            </form>
                                 <div class="register-link m-t-15 text-center">
                                     <p>Already have account ? <a href="page-login_f.html"> Sign in</a></p>
                                 </div>
@@ -107,122 +109,75 @@ function returnpage(){
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-analytics.js";
 
         // Initialize Firebase
-        const app = initializeApp(connect());
-        const analytics = getAnalytics(app); 
+        const firebaseConfig = {
+            apiKey: "AIzaSyDmezgJ-zRbF17C5gcxaFadUdk6OGA2f1I",
+            authDomain: "healthydiet-cb745.firebaseapp.com",
+            projectId: "healthydiet-cb745",
+            storageBucket: "healthydiet-cb745.appspot.com",
+            messagingSenderId: "549986503315",
+            appId: "1:549986503315:web:66a560c21f7a12f91e5b66"
+      };
+        const app = initializeApp(firebaseConfig);
 
-        import {getFirestore, doc, getDoc, setDoc, collection, addDoc, updateDoc, deleteDoc, deleteField}
-        from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js";
+        import {getFirestore, doc, getDoc, getDocs, onSnapshot, collection, query, updateDoc,
+                addDoc, deleteDoc, where,
+                orderBy, serverTimestamp
+                }
+        from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js"; 
+
 
         const db = getFirestore();
 
         // ---- Reference ------ //
-        let register = document.getElementById("Register");
-        let username = document.getElementById("Username");
-        let email = document.getElementById("Email");
-        let password = document.getElementById("Password");
+        const profileForm = document.querySelector("form");
+        const profileName = profileForm.querySelector('input[name="username"]');
+        const profileEmail = profileForm.querySelector('input[name="email"]');
+        const profilePassword = profileForm.querySelector('input[name="password"]');
+        const confirm_password = profileForm.querySelector('input[name="confirm_Password"]');
+        const editUserForm = document.querySelector('.edit');
+        
+        editUserForm.addEventListener('submit', (e) => {
+        e.preventDefault();
 
-        // Function for user registration
-        async function InsertData()
+        if(profilePassword.value != confirm_password.value)
         {
-            var ref = doc(db,"users", username.value);
-
-            const docRef = await setDoc(
-                ref, {
-                    username: username.value, 
-                    email: email.value,
-                    password: password.value
-                }
-            )
-            .then(()=>{
-                alert("data added successfully");
-                returnpage();
-            })
-            .catch(()=>{
-                alert("Unsuccessfully"+error);
-            })
-
-            window.setTimeout(function(){returnpage},3000);
+            alert("Password must be match")
         }
 
-        // Validation of the entered information
-        async function validation()
+        else
         {
-            var username = document.getElementById("Username");
-            var p = document.getElementById("Password");
-            var cp = document.getElementById("confirm_Password");
-            var email = document.getElementById("Email");
+            register();
+        }
+})
 
+async function register()
+{
+    var ref = doc(db,"users", profileName.value);
+            const docSnap =  await getDoc(ref);
 
-            if(username.value == '')
+            if(docSnap.exists())
             {
-                alert("Please fill in the username");
-                return false;
-            }
-
-            if(email.value == '')
-            {
-                alert("Please fill in the email");
-                return false;
-            }
-
-            if (email.value != '')
-            {
-                if(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value))
+                if((profileName.value == docSnap.data().username))
                 {
-
+                    alert("User existed");
                 }
-                else
+                
+            }
+
+            else
+            {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST','http://localhost/Healthy_diet/service/register.php/'+ profileName.value+ '/'+ profileEmail.value + 
+                '/' + profilePassword.value, true);
+                xhr.send();
+                xhr.onload = function()
                 {
-                    alert("You have entered an invalid email address!")
-                    return (false);
+                console.log(xhr.responseText);
+                alert(xhr.responseText);
+                returnpage();
                 }
             }
-
-            if(p.value == '')
-            {
-                alert("Please fill in the password");
-                return false;
-            }
-            
-            if(cp.value == '')
-            {
-                alert("Please fill in the confirm");
-                return false;
-            }
-
-            if(username.value != '')
-            {
-                var ref = doc(db,"users", username.value);
-                const docSnap = await getDoc(ref);
-
-                if(docSnap.exists())
-                {
-                    if(username.value == docSnap.data().username)
-                    {
-                        alert("Username is exist");
-                    }
-                }
-
-                else
-                    {
-                        if(p.value == cp.value) 
-                        {
-                            InsertData();
-                        } 
-                        else 
-                        {
-                            alert("Password Does Not Match!");
-                        }
-                    }
-            }
-
-        }     
-
-    //----- Assign events to button--------//
-    register.addEventListener('click',validation);
-        
-
-        
+}
     </script>
 
 </body>

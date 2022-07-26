@@ -7,9 +7,6 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 require '../vendor/autoload.php';
 require_once 'GFirestore.php';
-
-// Configure PHP to use the the Firebase session handler.
-
 $app = new \Slim\App;
 $app->get('/{user}', function (Request $request, Response $response, array $args) {
     $user=$args['user'];
@@ -22,7 +19,7 @@ try{
     //echo'<br>';
     //print_r($fs->getDocument( name: $user)['Gender']);
     //echo'<br>';
-$array=$fs->getuserfoodcalorierecord( name: $user);
+$array=$fs->getusercalorierecord( name: $user);
 $arr=[];
 foreach($array as $data){
     //print($data['CalNo']);
@@ -44,7 +41,7 @@ foreach($array as $data){
 
 $app->put('/{user}/{age}', function (Request $request, Response $response, array $args) {
     $user=$args['user'];
-    $age=(int)$args['age'];
+    $age=(int)$args['age']; 
     $fs=new Firestore( collection: 'users');
 
     $data=[
@@ -59,29 +56,7 @@ echo "update successful";
     
 }    
 });
-
-$app->get('/', function (Request $request, Response $response, array $args) {
-    $response->getBody()->write("this is the root directory.....");
-
-    return $response;
-});
-
-$app->get('/{user}/table', function (Request $request, Response $response, array $args) {
-    $user=$args['user'];
-    $fs=new Firestore( collection: 'users');
-    
-try{
-    $filenum=[];
-$array=$fs->getuserfoodtable($user);
-foreach($array as $data){
-    array_push($filenum,$data->data());
-}
-echo json_encode($filenum);
-}catch(PDOException $e){
-    $data=array("statues"=>"fail");
-    echo json_endode($data);
-}    
-});
-
+//$response->getBody()->write("this is $place");
+//print_r($fs->getDocument(name:''))
 $app->run();
 ?>

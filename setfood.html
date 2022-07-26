@@ -112,8 +112,13 @@
       </div>
       
       <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+   
+        const app=initializeApp(connect());
+        import{getFirestore,doc,getDoc,setDoc,getDocs,collection,addDoc, updateDoc,deleteDoc,deleteField, orderBy, serverTimestamp, Timestamp}
+        from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js"
+        const db=getFirestore();
         
-        var foodnum;
         //check session timeout
     if(localStorage.getItem("calorieusername"))
     { var currenttime=new Date().getTime();
@@ -131,20 +136,7 @@
 
         var username=JSON.parse(localStorage.getItem("calorieusername")).value;
         
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET','service/setcustomfood.php/'+username,true);
-        xhr.send();
-        xhr.onload = function(){
-      //console.log(xhr3.responseText);
-      try{
-        foodnum=JSON.parse(xhr.responseText);
-        foodnum+=1;
-        }
-        catch(err){
-          foodnum=1;
-        }
-      console.log(foodnum);
-        }
+      const getfood= await getDocs(collection(db,"users", username,"FoodTable"));
         document.getElementById("avatarname").innerHTML=username;
 
         var foodname=localStorage.getItem("foodname");
@@ -257,16 +249,22 @@ var tr=table.insertRow();
         {
           var text=document.getElementById("Adding");
         text.innerHTML="Adding data, please wait";
-        const xhr2 = new XMLHttpRequest();
-        xhr2.open('POST','service/setfood.php/'+username+'/'+foodnum+'/'+foodname+'/'+foodcpg+'/'+gram+'/'+cookm+'/'+totalc.toFixed(2),true);
-        xhr2.send();
-        xhr2.onload = function(){
-      //console.log(xhr2.responseText);
-      window.location.href="foodtable.html";
-        }
-        xhr2.onerror= function(error){
-          alert( error );
-        }
+          var foodnum=0;
+        getfood.forEach(doc=>{foodnum+=1});
+          setDoc(doc(db,"users", username,"FoodTable",(foodnum+=1).toString()),{
+            TableNo:foodnum,
+            NameOfFood:foodname,
+            CPG:foodcpg,
+            gram:gram,
+            cm:cookm,
+            totalcalorie:totalc.toFixed(2),
+            })
+            .then(()=>{
+                window.location.href="foodtable.html";
+            })
+            .catch((error)=>{
+                alert("error "+error);
+            });
         
         }
         else {

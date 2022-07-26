@@ -116,7 +116,6 @@
                   <table class="table">
                       <thead>               
                           <th>No</th>
-                          <th>Date and Time</th>             
                           <th style="text-align: center;">BMI</th>
                           <th style="text-align: center;">Delete</th>   
                       </thead>
@@ -151,25 +150,20 @@
       var CreateBMI;
       var recno;
 
-      function AddItemToTable(recno,time, bmi){
+      function AddItemToTable(recno, bmi){
         let tr = document.createElement("tr");
         let td1 = document.createElement('td');
-        let td2 = document.createElement('td');
         let td3 = document.createElement('td');
         
         td1.style.color="black";
-        td2.style.color="black";
         td3.style.color="black";
         td3.style.textAlign="center";
         
-        var times=time.toDate().toDateString()+ " at " + time.toDate().toLocaleTimeString();
         td1.innerHTML= ++ucNo;
-        td2.innerHTML= times;
         td3.innerHTML= bmi;
 
 
         tr.appendChild(td1);
-        tr.appendChild(td2);
         tr.appendChild(td3);
         var key=recno;
         var CtrDiv = document.createElement("button");
@@ -186,7 +180,7 @@
         ucNo=0;
         tbody.innerHTML="";
         TheUserBMI.forEach(element => {
-          AddItemToTable(element.No,element.createdAt, element.BMI);
+          AddItemToTable(element.No, element.BMI);
         });
 
         
@@ -241,7 +235,6 @@
           {
             recno=(num.data().No-1);
             bmirecord=num.data().BMI;
-            createbmi=num.data().createdAt;
             bmiarray.push(new bmi(bmirecord,createbmi,recno));
             count++;
           }
@@ -251,7 +244,6 @@
           setDoc(doc(db,"users",username,"BMI Value",(bmiarray[index].no).toString()),{
             No:parseInt(bmiarray[index].no),
             BMI:bmiarray[index].bmir,
-            createdAt:bmiarray[index].date,
           })
           .catch((error)=>{
             alert("error" + error);

@@ -112,8 +112,12 @@
       </div>
       
       <script type="module">
-       
-        var foodnum;
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+        
+        const app=initializeApp(connect());
+        import{getFirestore,doc,getDoc,setDoc,getDocs,collection,addDoc, updateDoc,deleteDoc,deleteField}
+        from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js"
+        const db=getFirestore();
         //check session timeout
     if(localStorage.getItem("calorieusername"))
     { var currenttime=new Date().getTime();
@@ -133,19 +137,7 @@
 
         document.getElementById("avatarname").innerHTML=username;
 
-        const xhr = new XMLHttpRequest();
-          xhr.open('GET','service/setcustomfood.php/'+username,true);
-          xhr.send();
-          xhr.onload = function(){
-        //console.log(xhr3.responseText);
-        try{
-        foodnum=JSON.parse(xhr.responseText);
-        foodnum+=1;
-        }
-        catch(err){
-          foodnum=1;
-        }
-          }
+        const getfood= await getDocs(collection(db,"users", username,"FoodTable"));
     
         var table=document.getElementById("table");
         table.border="3px; solid black";
@@ -258,19 +250,23 @@ var tr=table.insertRow();
         var cookvalue=cmethod.options[cmethod.selectedIndex].value;
         var totalc=foodcpg*gram*cookvalue;
         if(gram)
-        {
-          
-        const xhr2 = new XMLHttpRequest();
-        xhr2.open('POST','service/setcustomfood.php/'+username+'/'+foodnum+'/'+foodname+'/'+foodcpg+'/'+gram+'/'+cookm+'/'+totalc.toFixed(2),true);
-        xhr2.send();
-        xhr2.onload = function(){
-      //console.log(xhr2.responseText);
-      window.location.href="foodtable.html";
-        }
-        xhr2.onerror= function(error){
-          alert( error );
-        }
-          
+        {var foodnum=0;
+        getfood.forEach(doc=>{foodnum+=1});
+          setDoc(doc(db,"users", username,"FoodTable",(foodnum+=1).toString()),{
+            TableNo:foodnum,
+            NameOfFood:foodname,
+            CPG:foodcpg,
+            gram:gram,
+            cm:cookm,
+            totalcalorie:totalc.toFixed(2)
+            })
+            .then(()=>{
+                window.location.href="foodtable.html";
+            })
+            .catch((error)=>{
+                alert("error "+error);
+            });
+        
         }
         else {
           alert("gram value must enter");

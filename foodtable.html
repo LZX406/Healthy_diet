@@ -122,7 +122,12 @@
     </div>
     
       <script type="module">
-        
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+        const app=initializeApp(connect());
+        import{getFirestore,doc,getDoc,getDocs,setDoc,onSnapshot,collection,addDoc, updateDoc,deleteDoc,deleteField, orderBy, serverTimestamp, Timestamp}
+        from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js"
+        const db=getFirestore();
+
     //check session timeout
     if(localStorage.getItem("calorieusername"))
     { var currenttime=new Date().getTime();
@@ -213,22 +218,17 @@
         
         var countnum=0;
         var array;
-        var foodarray=[];
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET','service/foodtable.php/'+username+'/table',true);
-        xhr.send();
-        xhr.onload = function(){
-      //console.log(xhr3.responseText);
-      foodarray=JSON.parse(xhr.responseText);
-      console.log(foodarray);
-          foodarray.forEach(num=>{
-            var key=num.TableNo,
-            foodno=num.No,
-            foodname=num.NameOfFood,
-            foodcpg=num.CPG,
-            foodcm=num.cm,
-            foodgram=num.gram,
-            foodtotalc=parseFloat(num.totalcalorie)
+        var getfood=collection(db,"users", username,'FoodTable');
+        onSnapshot(getfood,(foodtable)=>{
+          foodtable.forEach(num=>{
+            var key=num.data().TableNo,
+            foodno=num.data().No,
+            foodname=num.data().NameOfFood,
+            foodcpg=num.data().CPG,
+            foodcm=num.data().cm,
+            foodgram=num.data().gram,
+            foodtotalc=parseFloat(num.data().totalcalorie),
+            createdAt=num.data().createdAt
             var button=document.createElement("button");
             button.style.width="80px";
             button.style.height="40px";
@@ -317,8 +317,7 @@
         unit.innerHTML="cal";
         total.innerHTML=allfoodtotalc.toFixed(2);
 
-          }
-        
+          });
         start=false;
         }
 
@@ -333,26 +332,21 @@
   //insert calorie record     
   async function displayCalorie(){
   var foodnum=0;    
-  const xhr2 = new XMLHttpRequest();
-          xhr2.open('GET','service/foodtable.php/'+username,true);
-          xhr2.send();
-          xhr2.onload = function(){
-        //console.log(xhr3.responseText);
-        foodnum=JSON.parse(xhr2.responseText);
-        foodnum+=1;
-        console.log(foodnum);
-          const xhr3 = new XMLHttpRequest();
-        xhr3.open('POST','service/foodtable.php/'+username+'/'+foodnum+'/'+allfoodtotalc.toFixed(2),true);
-        xhr3.send();
-        xhr3.onload = function(){
-      //console.log(xhr3.responseText);
+  var today=Timestamp.fromDate(new Date());
+
+  const getrecord= await getDocs(collection(db,"users", username,"Calorierecord"));
+  getrecord.forEach(doc=>{foodnum+=1});
+  setDoc(doc(db,"users", username,"Calorierecord",(foodnum+=1).toString()),{
+  CalNo:foodnum,
+  Totalcalorie:allfoodtotalc.toFixed(2),
+  createdAt:today
+  })
+  .then(()=>{
       alert("data stored");
-      window.location.href="foodtable.html";
-        }
-        xhr3.onerror= function(error){
-          alert( error );
-        }
-      }
+  })
+  .catch((error)=>{
+      alert("error "+error);
+  });
   
   }
  
@@ -362,21 +356,21 @@
       document.getElementById("creating").innerHTML="No food has been added."
     }
     else{
+    var foodtables=await collection(db,"users", username,'FoodTable');
     if(confirm("Delete all the food in the list?"))
     {
-      const xhr4 = new XMLHttpRequest();
-        xhr4.open('DELETE','service/foodtable.php/'+username+'/delete',true);
-        xhr4.send();
-        xhr4.onload = function(){
-      //console.log(xhr4.responseText);
-      document.getElementById("creating").innerHTML="Deleting all food..."
+      onSnapshot(foodtables,(foodnewtable)=>{
+        foodnewtable.forEach(num=>{
+          deleteDoc(doc(db,"users", username,"FoodTable",num.data().TableNo.toString()));
+          var oldtable =document.getElementById("table");
+          if(oldtable.rows.length> 2)
+          {oldtable.deleteRow(1);}
+        });
+        });
+        document.getElementById("creating").innerHTML="Deleting all food..."
         total.innerHTML=0;
         window.setTimeout(function(){window.location.href="foodtable.html"
         },2500);
-        }
-        xhr4.onerror= function(error){
-          alert( error );
-        }
       }   
       }
       }

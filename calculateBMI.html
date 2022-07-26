@@ -276,30 +276,6 @@ function calculateBMI() {
 
       // ------  Insert data -----//
 
-      async function InsertData()
-      {   const getBMI= await getDocs(collection(db,"users", username,"BMI Value"));
-          var index = 0;
-          var today=Timestamp.fromDate(new Date());
-          getBMI.forEach(doc=>{index+=1});
-          var ref = doc(db, "users", username, "BMI Value", (index+=1).toString()); 
-
-          const docRef = await setDoc(
-              ref, {
-                  No:index,
-                  BMI: bmi.innerHTML,
-                  createdAt:today
-              }
-          )
-          .then(()=>{
-              alert("data added successfully");
-          })
-          .catch(()=>{
-              alert("Unsuccessfully"+error);
-          })
-          //index++;
-          window.setTimeout(function(){returnpage},3000);
-      }
-
       function validate()
       {
         if(bmi.innerHTML == "")
@@ -307,7 +283,16 @@ function calculateBMI() {
           alert("Please calculate the value");
         }
         else{
-          InsertData();
+          
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST','http://localhost/Healthy_diet/service/addBMI.php/'+ username + '/'+ bmi.innerHTML, true);
+
+            xhr.send();
+            xhr.onload = function()
+            {
+            console.log(xhr.responseText);
+            alert(xhr.responseText);
+            }
         }
       }
 
