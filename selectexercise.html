@@ -1,0 +1,472 @@
+<html lang="en">
+<head>
+  <script type="text/javascript" src="assets/js/databaseurl.js"></script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Exercise</title>
+    <link rel="icon" type="image/png" href="assets/images/eclogo.jpeg"/>
+    <link rel="stylesheet" href="selectexercisestyles.css">
+   
+
+    <!-- Styles -->
+    <link href="assets/css/lib/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/lib/menubar/sidebar.css" rel="stylesheet">
+    <link href="assets/css/lib/bootstrap.min.css" rel="stylesheet">
+
+    <link href="assets/css/lib/helper.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <style>
+      button:hover{
+        background-color:black;
+        color:white;
+      }
+
+      button{
+        color:black;
+      }
+
+      input[type="submit"]:hover{
+        background-color:black;
+        color:white;
+      }
+
+      input[type="submit"]{
+        color:black;
+      }
+
+      input[type="button"]:hover{
+        background-color:black;
+        color:white;
+      }
+
+      input[type="button"]{
+        color:black;
+      }
+    </style>
+</head>
+<body>
+  <div class="sidebar sidebar-hide-to-small sidebar-shrink sidebar-gestures">
+    <div class="nano">
+      <div class="nano-content">
+        <div class="logo"><span> <img src="assets/images/eclogo.jpeg" width="250px" height="250px"></span>
+          
+            <!-- <img src="assets/images/logo.png" alt="" /> -->
+            <span>Healthy Diet</span>
+        </div>
+        <ul>
+          <li class="label">Apps</li>
+              <li>
+                <a href="foodtable.html"><i class="ti-angle-right"></i>Calculate food calorie</a>
+              </li>
+              <li>
+                <a href="addusercalorie.html"><i class="ti-angle-right"></i>Calculate daily calorie</a>
+              </li>
+              <li>
+                <a href="Calorieshistory.html"><i class="ti-angle-right"></i>View calories history</a>
+              </li>
+              <li>
+                <a href="selectexercise.html"><i class="ti-angle-right"></i>View amount of exercise</a>
+              </li>
+              <li>
+                <a href="calculateBMI.html"><i class="ti-angle-right"></i>Calculate BMI</a>
+              </li>
+              <li>
+                <a href="BMI_history.html"><i class="ti-angle-right"></i>BMI Record</a>
+              </li>
+          <li>
+            <a href="app-profile.html">
+              <i class="ti-user"></i> Profile</a>
+          </li>
+          <li class="label">Features</li>
+          <li>
+            <a href="page-reset-password_f.html">
+              <i class="ti-target"></i> Reset password
+            </a>
+          </li>
+          <li>
+            <a  onclick="logout()">
+              <i class="ti-close"></i> Logout</a>
+          </li>
+        </ul></div></div></div>
+  <!-- /# sidebar -->
+  <div class="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="float-left">
+            <div class="hamburger sidebar-toggle">
+              <span class="line"></span>
+              <span class="line"></span>
+              <span class="line"></span>
+            </div>
+          </div>
+          <div class="float-right">
+              <div class="header-icon" >
+                <a href="app-profile.html">
+                <span class="user-avatar" id="avatarname">
+                  <i class="ti-angle-down f-s-10"></i></a>
+                </span>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="content-wrap">
+    <div class="card nestable-cart">
+      <h2 style="margin-left:30px;Color:black">User calorie consumed</h2>
+    <label style="margin-left: 30px;color:black;" style="margin-top: 30px;">User daily calorie :<input style="color:black; text-align: center;" id="Caloriebox" type="text" disabled></label>  <br>
+    <label style="margin-left: 30px;color:black;" style="margin-top: 30px;">Calorie consumed exceed :<input style="color:black; text-align: center;" id="Namebox" type="text" disabled></label>  <br>
+    <label style="margin-left: 30px;color:black;">Location :<select id="Locbox">
+        <option value="home">Home</option>
+        <option value="office">Office</option>
+    </select></label>
+     <br>
+    
+    <label style="margin-left: 30px;color:black;">Suggested Exercises :</label> 
+    <div class="container mt-3" style="margin-left: 30px;">
+        <table class="table table-bordered" style="margin-left: 35px; text-align: center;">
+            <thead>
+                <tr>
+                <th>Exercise</th>
+                <th>Calories burned per minute</th>
+                <th>Amount of time needed (min)</th>
+                </tr>
+            </thead>
+            <tbody id="tbody1"></tbody>
+        </table>
+    </div>
+    
+
+    <br><br>
+
+    <br>
+    <hr> 
+
+    <button style="margin-left: 30px; width:300px;" id="viewBtn">View Exercise</button>
+    </div>
+  </div>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+        
+        // Initialize Firebase
+        const app = initializeApp(connect());
+
+        import {
+            getFirestore, doc, getDoc, getDocs, setDoc, collection, addDoc, updateDoc, deleteDoc, deleteField, onSnapshot, Timestamp, serverTimestamp, orderBy, query, where
+        }
+        from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js";
+
+        const db = getFirestore();
+
+      // check session timeout
+      if(localStorage.getItem("calorieusername"))
+      {
+        var currenttime = new Date().getTime();
+        var checkexpire = JSON.parse(localStorage.getItem("calorieusername"));
+
+        if(currenttime-checkexpire.time >= checkexpire.expire)
+        {
+          alert("session timeout");
+          localStorage.removeItem("calorieusername");
+          window.location.href = "page-login_f.html";
+        }
+      }
+      else{
+      window.location.href="page-login_f.html";
+    }
+
+      var username = JSON.parse(localStorage.getItem("calorieusername")).value;
+      document.getElementById("avatarname").innerHTML=username;
+
+//-----------------------------References-------------------------------------//
+
+        let Namebox = document.getElementById("Namebox");
+        let Locbox = document.getElementById("Locbox");
+        let Exbox = document.getElementById("Exbox");
+        
+        let viewBtn = document.getElementById("viewBtn"); 
+
+//----------------------------Adding Document---------------------------------//
+
+        // async function AddDocument_AutoID(){
+        //     var ref = collection(db, "users");
+
+        //     const docRef = await addDoc(
+        //         ref, {
+        //             NameOfStd: Namebox.value
+        //         }
+        //     )
+        //     .then(()=>{
+        //         alert("data added successfully");
+        //     })
+        //     .catch((error) =>{
+        //         alert("Unsuccessful operation, error:" + error);
+        //     });
+        //     console.log("document id is "+docRef.id);
+        // }
+
+        // async function AddDocument_CustomID(){
+        //     var ref = collection(db, "users", RollBox.value);
+
+        //     await setDoc(
+        //         ref, {
+        //             NameOfStd: Namebox.value
+        //         }
+        //     )
+        //     .then(()=>{
+        //         alert("data added successfully");
+        //     })
+        //     .catch((error) =>{
+        //         alert("Unsuccessful operation, error:" + error);
+        //     });
+        // }
+
+//----------------------------Getting a Doc-----------------------------------//
+
+        async function GetHistory(){
+            //Query documents based on today's date
+            let pretoday = new Date();
+            pretoday.setHours(0,0,0,0);
+
+            var username2 = JSON.parse(localStorage.getItem("calorieusername")).value;
+
+            let today = Timestamp.fromDate(pretoday);
+
+            // var histref = collection(db, "users", username2, "Calorierecord");
+            var calories = [];
+            xhr.open('GET','https://localhost/Healthy_diet/service/SelectExercise.php/'+username+'/caloriehistory',true);
+            xhr.send();
+            xhr.onload = function(){
+            caloriearray=JSON.parse(xhr.responseText);
+              for( i=0;i<caloriearray.length;i++)
+              {
+                if(caloriearray.createdAt > today)
+                {
+                  calories.push(doc.data().Totalcalorie);
+                }
+              }
+              
+            }
+
+            // const q = query(histref, where("createdAt", ">", today));
+
+            
+            
+
+            // const querySnapshot = await getDocs(q);
+
+            //     //Calculate total calorie 
+            //     var calories = [];
+
+            //     querySnapshot.forEach(doc => {
+            //         calories.push(doc.data().Totalcalorie);
+            //     });
+            var ucalorie;
+            xhr.open('GET','https://localhost/Healthy_diet/service/SelectExercise.php/'+username+'/record',true);
+            xhr.send();
+            xhr.onload = function(){
+            record=JSON.parse(xhr.responseText);
+            if (record.exists()){
+                  ucalorie = docSnap.data().UserDailyCalorie;
+                } else {
+                  console.log("No such document!");
+                }
+              
+            }
+            // var ucref = doc(db, "users", username2, "UserdailyCalorie", "record");
+            // // const r = query(ucref);
+            //     const docSnap = await getDoc(r);
+
+                //Calculate total calorie 
+                
+
+                
+                
+                AddCalories(calories, ucalorie);
+                Caloriebox.value = ucalorie;
+
+                if (Namebox.value < 0 ){
+                  Namebox.value = 0;
+                  document.getElementById("viewBtn").hidden = true;
+                }
+
+
+                // Namebox.value = docSnap.data().totalcalorie;
+        }
+
+//----------------------------Updating a Doc----------------------------------//
+
+//          async function UpdateDoc(){
+//             var ref = collection(db, "users", RollBox.value);
+
+//             await updateDoc(
+//                 ref, {
+//                     NameOfStd: Namebox.value
+//                 }
+//             )
+//             .then(()=>{
+//                 alert("data updated successfully");
+//             })
+//             .catch((error) =>{
+//                 alert("Unsuccessful operation, error:" + error);
+//             });
+//         }
+
+// //----------------------------Deleting a Doc----------------------------------//
+
+//         async function DeleteDoctument(){
+//             var ref = doc(db, "users", Rollbox.value);
+//             const docSnap = await getDoc(ref);
+
+//             if(!docSnap.exists()){
+//                 alert("Document does not exist");
+//                 return;
+//             }
+
+//             await deleteDoc(ref)
+//             .then(()=>{
+//                 alert("data deleted successfully");
+//             })
+//             .catch((error)=>{
+//                 alert("Unsuccessful operation, error:"+ error);
+//             });
+//         }
+
+//----------------------------Filling the Table-------------------------------//
+
+        function AddItemToTable(name, cpm){
+
+            var exNo = 0;
+            var calories = Namebox.value;
+            var atn = (calories/cpm);
+
+            var tbody = document.getElementById("tbody1");
+
+            let trow = document.createElement("tr");
+            let td1 = document.createElement("td");
+            let td2 = document.createElement("td");
+            let td3 = document.createElement("td");
+            
+          
+
+            td1.innerHTML= name;
+            td2.innerHTML= cpm;
+            td3.innerHTML= atn.toFixed(2);
+
+            td3.style.cssText = 'text-align: center;';
+            td1.classList += "nameField";
+            td2.classList += "cpmField";
+            td3.classList += "atnField";
+
+            trow.appendChild(td1);
+            trow.appendChild(td2);
+            trow.appendChild(td3);
+
+            tbody.appendChild(trow);
+        }
+
+        function AddAllItemsToTable(exercises){
+            // tbody.innerHTML="";
+
+            exercises.forEach(element => {
+                AddItemToTable(element.name, element.cpm);
+            });
+        }
+
+//----------------------------Get All Data------------------------------------//
+
+        function SelectAllData(){
+
+        }
+
+        async function GetAllDataOnce(){
+            const querySnapshot = await getDocs(collection(db, "location", "home", "exercises"));
+
+            var exercises = [];
+
+            querySnapshot.forEach(doc => {
+                exercises.push(doc.data());
+            });
+
+            AddAllItemsToTable(exercises);
+        }
+
+        async function GetAllDataRealtime(){
+          
+          if(Namebox.value > 0){
+            var tbody = document.getElementById("tbody1");
+
+            while(tbody.hasChildNodes()){
+                tbody.removeChild(tbody.firstChild);
+            }
+
+            let loc = Locbox.value;
+            const dbRef = await collection(db, "location", loc, "exercises");
+
+            onSnapshot(dbRef, orderBy("cpm"), (querySnapshot)=>{
+                var exercises = [];
+
+                querySnapshot.forEach(doc => {
+                    exercises.push(doc.data());
+                });
+
+                AddAllItemsToTable(exercises);
+            })
+          } else {
+
+            
+            document.getElementById("viewBtn").disabled = true;
+          }
+
+        }
+//---------------------------Calc Total Calorie for the Day-------------------//
+function AddCalories(calories, ucalorie){
+            // tbody.innerHTML="";
+            var totcal = 0;
+
+            var calories2 = [];
+
+            var calories2 = calories.map(Number);
+
+            for( var i = 0; i<calories2.length; i++){
+                totcal += calories2[i];
+            }
+
+            var caldif = totcal.toFixed(2) - ucalorie;
+
+            Namebox.value = caldif.toFixed(2);
+
+        }
+
+
+//---------------------------Get Current Date---------------------------------//
+var A = Timestamp.fromDate(new Date());
+
+window.onload = GetHistory;
+
+        viewBtn.addEventListener("click", GetAllDataRealtime);
+
+    </script>
+
+    <div id="search">
+        <button type="button" class="close">×</button>
+        <form>
+        <input type="search" value="" placeholder="type keyword(s) here" />
+        <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+    </div>
+    <!-- jquery vendor -->
+    <script src="assets/js/lib/jquery.min.js"></script>
+    <script src="assets/js/lib/jquery.nanoscroller.min.js"></script>
+    <script src="assets/js/lib/menubar/sidebar.js"></script>
+    <script src="assets/js/lib/preloader/pace.min.js"></script>
+    <script src="assets/js/scripts.js"></script>
+
+
+
+</body>
+</html>

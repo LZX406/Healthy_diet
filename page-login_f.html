@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script type="text/javascript" src="assets/js/databaseurl.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="assets/images/eclogo.jpeg"/>
+    <title>Login</title>
+
+    <!-- Styles -->
+    <link href="assets/css/lib/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/lib/helper.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+</head>
+
+<script>
+    function returnpage(){
+    window.location.href="app-profile.html";
+        }
+</script>
+
+<style>
+    .back{
+    background-image: url('assets/images/background.jpg');
+    background-repeat: no-repeat;
+    background-attachment: fixed;  
+    background-size: cover;}
+</style>
+
+
+<body class="back"> <!-- background image -->
+
+    <div class="unix-login">
+        <div class="container-fluid" style="opacity: 0.92;"> <!-- transparent -->
+            <div class="row justify-content-center">
+                <div class="col-lg-6">
+                    <div class="login-content">
+                        <div class="login-form">
+                            <div class="login-logo">
+                                <a href="page-login_f.html"><img src="assets/images/cover.png"></span></a> <!-- Logo -->
+                            </div>
+                            <h3 style="text-align: center;">Login</h3><br>
+                            
+                                <div class="form-group">
+                                    <span>Username:</span>
+                                    <input type="text" id="Username" class="form-control" placeholder="" data-validate = "Please fill in your email" required>
+                                </div>
+                                <br>
+                                <div class="form-group">
+                                    <span>Password:</span>
+                                    <input type="password" id="Password" class="form-control" placeholder="" data-validate = "Please fill in your password" required>
+                                </div>
+                                <div class="checkbox">
+                                    <label class="pull-right">
+										<a href="page-reset-password_f.html">Forgot Password?</a>
+									</label>
+
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30" id="signin">Sign in</button>
+                                
+                                <div class="register-link m-t-15 text-center">
+                                    <p>Don't have account ? <br><a href="page-register_f.html"> Sign Up Here</a></p>
+                                </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-analytics.js";
+
+        // Initialize Firebase
+        const app = initializeApp(connect());
+        const analytics = getAnalytics(app);
+
+        import {getFirestore, doc, getDoc, setDoc, collection, addDoc, updateDoc, deleteDoc, deleteField}
+        from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js";
+
+        const db = getFirestore();
+
+        // ---- Reference ------ //
+        let signin = document.getElementById("signin");
+        
+        let username = document.getElementById("Username");
+        let password = document.getElementById("Password");
+
+        // Funtion for user login
+
+
+        
+        async function LoginData()
+        {
+         var  userarray=[];
+        xhr.open('GET','https://localhost/Healthy_diet/service/login.php/'+username,true);
+        xhr.send();
+        xhr.onload = function(){
+          userarray=JSON.parse(xhr.responseText);
+          console.log(userarray);
+            if(userarray.exists())
+            {
+                
+                password = userarray.password,
+                name =userarray.name;
+                if((username.value == name) && (password.value == password))
+                {
+                    let obj = {
+                        time: new Date().getTime(),
+                        value: username.value,
+                        expire: 3600000,
+                    }
+                    localStorage.setItem("calorieusername",JSON.stringify(obj));
+                    returnpage();
+                }
+
+                else
+                {
+                    alert("Username or password is wrong");
+                }
+            }
+            else
+            {
+                alert("Username or password is wrong");
+            }
+        }
+            
+        }
+
+        function validate()
+        {
+            if(username.value == "")
+            {
+                alert("Please enter the username");
+            }
+            else if(password.value == "")
+            {
+                alert("Please enter the password");
+            }
+            else
+            LoginData();
+        }
+        //----- Assign events to button--------//
+        signin.addEventListener('click',validate);
+        
+
+        
+      </script>
+
+</body>
+</html>

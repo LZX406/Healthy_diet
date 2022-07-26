@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <script type="text/javascript" src="assets/js/databaseurl.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="assets/images/eclogo.jpeg"/>
+    <title>Food Table</title>
+
+    <!-- Styles -->
+    <link href="assets/css/lib/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/lib/menubar/sidebar.css" rel="stylesheet">
+    <link href="assets/css/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/lib/helper.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <style>
+      button:hover{
+        background-color:black;
+        color:white;
+      }
+
+      button{
+        color:black;
+      }
+      
+      #cell1{
+        margin-right:50px;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div class="sidebar sidebar-hide-to-small sidebar-shrink sidebar-gestures">
+      <div class="nano">
+        <div class="nano-content">
+          <div class="logo"><span> <img src="assets/images/eclogo.jpeg" width="250px" height="250px"></span>
+            
+              <!-- <img src="assets/images/logo.png" alt="" /> -->
+              <span>Healthy Diet</span>
+          </div>
+          <ul>
+            <li class="label">Apps</li>
+                <li>
+                  <a href="foodtable.html"><i class="ti-angle-right"></i>Calculate food calorie</a>
+                </li>
+                <li>
+                  <a href="addusercalorie.html"><i class="ti-angle-right"></i>Calculate daily calorie</a>
+                </li>
+                <li>
+                  <a href="Calorieshistory.html"><i class="ti-angle-right"></i>View calories history</a>
+                </li>
+                <li>
+                  <a href="selectexercise.html"><i class="ti-angle-right"></i>View amount of exercise</a>
+                </li>
+                <li>
+                  <a href="calculateBMI.html"><i class="ti-angle-right"></i>Calculate BMI</a>
+                </li>
+                <li>
+                  <a href="BMI_history.html"><i class="ti-angle-right"></i>BMI Record</a>
+                </li>
+            <li>
+              <a href="app-profile.html">
+                <i class="ti-user"></i> Profile</a>
+            </li>
+            <li class="label">Features</li>
+            <li>
+              <a href="page-reset-password_f.html">
+                <i class="ti-target"></i> Reset password
+              </a>
+            </li>
+            <li>
+              <a  onclick="logout()">
+                <i class="ti-close"></i> Logout</a>
+            </li>
+          </ul></div></div></div>
+    <!-- /# sidebar -->
+    <div class="header">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="float-left">
+              <div class="hamburger sidebar-toggle">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+              </div>
+            </div>
+            <div class="float-right">
+                <div class="header-icon" >
+                  <a href="app-profile.html">
+                  <span class="user-avatar" id="avatarname">
+                    <i class="ti-angle-down f-s-10"></i></a>
+                  </span>
+                </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    <div class="content-wrap">
+      <div class="card nestable-cart">
+      <h2 style="margin-left:30px">Calculate Food Calorie</h2>
+      <text id="prompt">You have eat...</text>
+      <table id="table"></table>
+      <ln style="font-size:20px;margin-left:30px; margin-top:50px; height:40px; color:black;" id="creating"></ln>
+      <ln>
+      <button style="margin-left:30px; width:200px; height:60px" id="add">Add from food list</button>
+      <button style="margin-left:30px; width:200px; height:60px" id="addcustom">Add custom food</button>
+      <button style="margin-left:30px; margin-top:20px; width:100px; height:60px" id="calculate">Save record</button>
+      <button style="margin-left:30px; margin-top:20px; height:60px" id="deleteall">Clear all food</button></ln>
+      <div>
+      <br>
+      <ln style="font-size:20px;margin-left:30px; margin-top:50px; width:200px; height:40px; color:black;"id="opening">The total calorie you have take from this meal is: </ln>
+      <ln id="total"></ln>
+      <ln id="unit"></ln>
+      </div>
+    </div>
+    </div>
+    
+      <script type="module">
+        
+    //check session timeout
+    if(localStorage.getItem("calorieusername"))
+    { var currenttime=new Date().getTime();
+      var checkexpire=JSON.parse(localStorage.getItem("calorieusername"));
+      if(currenttime-checkexpire.time>=checkexpire.expire)
+      {
+        alert("session timeout");
+        localStorage.removeItem("calorieusername");
+        window.location.href="page-login_f.html";
+      }
+    }
+    else{
+      window.location.href="page-login_f.html";
+    }
+
+    var username=JSON.parse(localStorage.getItem("calorieusername")).value;
+  document.getElementById("avatarname").innerHTML=username;
+
+    var foodno;
+    var foodname;
+    var foodcpg;
+    var foodcm;
+    var foodtotalc;
+    var foodgram;
+    var allfoodtotalc=0;
+    var tableno;
+    var createdAt;
+    var start=true;
+    var prompt=document.getElementById("prompt");
+    prompt.style="margin-left:30px; font-size:20px;Color:black";
+   
+    var table=document.getElementById("table");
+    table.border="3px; solid black";
+    if(start)
+    {
+        var tr=table.insertRow();
+        var td=tr.insertCell();
+        td.style.textAlign='center';
+        td.style.width='120px';
+        td.style.height='100px';
+        td.style.color="black";
+        td.innerHTML= "Food";
+        var td=tr.insertCell();
+        td.style.textAlign='center';
+        td.style.width='120px';
+        td.style.height='100px';
+        td.style.color="black";
+        td.innerHTML="Calorie/gram";
+        var td=tr.insertCell();
+        td.style.textAlign='center';
+        td.style.width='120px';
+        td.style.height='100px';
+        td.style.color="black";
+        td.innerHTML="Food gram";
+        var td=tr.insertCell();
+        td.style.textAlign='center';
+        td.style.width='120px';
+        td.style.height='100px';
+        td.innerHTML="Cooking method";
+        td.style.color="black";
+        var td=tr.insertCell();
+        td.style.textAlign='center';
+        td.style.width='120px';
+        td.style.height='100px';
+        td.innerHTML="Update food data";
+        td.style.color="black";
+        var td=tr.insertCell();
+        td.style.textAlign='center';
+        td.style.width='120px';
+        td.style.height='100px';
+        td.innerHTML="Delete food data";
+        td.style.color="black";
+        var td=tr.insertCell();
+        td.style.textAlign='center';
+        td.style.width='120px';
+        td.style.height='100px';
+        td.innerHTML="Total calorie";
+        td.style.color="black";
+        //display on table empty
+        var tr1=table.insertRow();
+        var td=tr1.insertCell();
+        td.colSpan="7";
+        td.style.textAlign='center';
+        td.style.width='480px';
+        td.style.height='100px';
+        td.style.color="black";
+        td.innerHTML="No food has been added, click Add food button below to add food";
+        
+        var countnum=0;
+        var array;
+        var foodarray=[];
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET','https://localhost/Healthy_diet/service/foodtable.php/'+username+'/table',true);
+        xhr.send();
+        xhr.onload = function(){
+      //console.log(xhr3.responseText);
+      foodarray=JSON.parse(xhr.responseText);
+      console.log(foodarray);
+          foodarray.forEach(num=>{
+            var key=num.TableNo,
+            foodno=num.No,
+            foodname=num.NameOfFood,
+            foodcpg=num.CPG,
+            foodcm=num.cm,
+            foodgram=num.gram,
+            foodtotalc=parseFloat(num.totalcalorie)
+            var button=document.createElement("button");
+            button.style.width="80px";
+            button.style.height="40px";
+            button.innerHTML="update";
+            button.addEventListener('click',updatefood);
+            var button2=document.createElement("button");
+            button2.style.width="80px";
+            button2.style.height="40px";
+            button2.innerHTML="delete";
+            button2.addEventListener('click',deletefood);
+
+            function updatefood(){
+            sessionStorage.setItem("foodno",key);
+            window.location.href="updatefood.html";
+            }
+            function deletefood(){
+            sessionStorage.setItem("deletefoodno",key);
+            window.location.href="deletefood.html";
+            }
+            
+            var tr=table.insertRow();
+            var td=tr.insertCell();
+            td.style.textAlign='center';
+            td.style.width='120px';
+            td.style.height='100px';
+            td.style.color="black";
+            td.innerHTML= foodname;
+            var td=tr.insertCell();
+            td.style.textAlign='center';
+            td.style.width='120px';
+            td.style.height='100px';
+            td.style.color="black";
+            td.innerHTML=foodcpg;
+            var td=tr.insertCell();
+            td.style.textAlign='center';
+            td.style.width='120px';
+            td.style.height='100px';
+            td.style.color="black";
+            td.innerHTML=foodgram;
+            var td=tr.insertCell();
+            td.style.textAlign='center';
+            td.style.width='120px';
+            td.style.height='100px';
+            td.style.color="black";
+            td.innerHTML=foodcm;
+            var td=tr.insertCell();
+            td.align="center";
+            td.append(button);
+            var td2=tr.insertCell();
+            td2.align="center";
+            td2.append(button2);
+            var td=tr.insertCell();
+            td.style.textAlign='center';
+            td.style.width='120px';
+            td.style.height='100px';
+            td.style.color="black";
+            td.innerHTML=foodtotalc;
+            allfoodtotalc+=foodtotalc;
+            countnum+=1;
+          });
+          
+
+        if(countnum>=1){
+            var foodtablelist=document.getElementById("table");
+            foodtablelist.deleteRow(1);
+        }
+        
+        var add=document.getElementById("add");
+        add.addEventListener('click',addfood);
+        var addcustom=document.getElementById("addcustom");
+        addcustom.addEventListener('click',addcustomfood);
+        var cal=document.getElementById("calculate");
+        cal.addEventListener('click',displayCalorie);
+        var del=document.getElementById("deleteall");
+        del.addEventListener('click',newtable);
+        var total=document.getElementById("total");
+        total.style="margin-top:50px; font-size:20px";
+        total.style.width="200px";
+        total.style.height="40px";
+        total.style.color="black";
+        var unit=document.getElementById("unit");
+        unit.style="margin-top:50px; font-size:20px";
+        unit.style.width="200px";
+        unit.style.height="40px";
+        unit.style.color="black";
+        unit.innerHTML="cal";
+        total.innerHTML=allfoodtotalc.toFixed(2);
+
+          }
+        
+        start=false;
+        }
+
+ function addfood(){
+    window.location.href="foodlist.html";
+ }
+
+ function addcustomfood(){
+    window.location.href="setcustomfood.html";
+ }
+
+  //insert calorie record     
+  async function displayCalorie(){
+  var foodnum=0;    
+  const xhr2 = new XMLHttpRequest();
+          xhr2.open('GET','https://localhost/Healthy_diet/service/foodtable.php/'+username,true);
+          xhr2.send();
+          xhr2.onload = function(){
+        //console.log(xhr3.responseText);
+        foodnum=JSON.parse(xhr2.responseText);
+        foodnum+=1;
+        console.log(foodnum);
+          const xhr3 = new XMLHttpRequest();
+        xhr3.open('POST','https://localhost/Healthy_diet/service/foodtable.php/'+username+'/'+foodnum+'/'+allfoodtotalc.toFixed(2),true);
+        xhr3.send();
+        xhr3.onload = function(){
+      //console.log(xhr3.responseText);
+      alert("data stored");
+      window.location.href="foodtable.html";
+        }
+        xhr3.onerror= function(error){
+          alert( error );
+        }
+      }
+  
+  }
+ 
+  async function newtable(){
+    if(total.innerHTML==0)
+    {
+      document.getElementById("creating").innerHTML="No food has been added."
+    }
+    else{
+    if(confirm("Delete all the food in the list?"))
+    {
+      const xhr4 = new XMLHttpRequest();
+        xhr4.open('DELETE','https://localhost/Healthy_diet/service/foodtable.php/'+username+'/delete',true);
+        xhr4.send();
+        xhr4.onload = function(){
+      //console.log(xhr4.responseText);
+      document.getElementById("creating").innerHTML="Deleting all food..."
+        total.innerHTML=0;
+        window.setTimeout(function(){window.location.href="foodtable.html"
+        },2500);
+        }
+        xhr4.onerror= function(error){
+          alert( error );
+        }
+      }   
+      }
+      }
+</script> 
+   
+    
+    <!-- jquery vendor -->
+    <script src="assets/js/lib/jquery.min.js"></script>
+    <script src="assets/js/lib/jquery.nanoscroller.min.js"></script>
+    <!-- nano scroller -->
+    <script src="assets/js/lib/menubar/sidebar.js"></script>
+    <script src="assets/js/lib/preloader/pace.min.js"></script>
+    <!-- sidebar -->
+
+    <script src="assets/js/scripts.js"></script>
+    <!-- scripit init-->
+
+
+
+
+
+  </body>
+
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script type="text/javascript" src="assets/js/databaseurl.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="icon" type="image/png" href="assets/images/eclogo.jpeg"/>
+    <title>Calorie history</title>
+
+    <!-- Common -->
+    <link href="assets/css/lib/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/lib/menubar/sidebar.css" rel="stylesheet">
+    <link href="assets/css/lib/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/lib/helper.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+
+    <style>
+      table, th, td, tr{
+        border: 3px solid black;
+        text-align: center;
+        table-layout: fixed;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+    
+      button:hover{
+        background-color:black;
+        color:white;
+      }
+
+      button{
+        color:black;
+      }
+
+      </style>
+</head>
+
+<body>
+  <div class="sidebar sidebar-hide-to-small sidebar-shrink sidebar-gestures">
+    <div class="nano">
+      <div class="nano-content">
+        <div class="logo"><span> <img src="assets/images/eclogo.jpeg" width="250px" height="250px"></span>
+          
+            <!-- <img src="assets/images/logo.png" alt="" /> -->
+            <span>Healthy Diet</span>
+        </div>
+        <ul>
+          <li class="label">Apps</li>
+              <li>
+                <a href="foodtable.html"><i class="ti-angle-right"></i>Calculate food calorie</a>
+              </li>
+              <li>
+                <a href="addusercalorie.html"><i class="ti-angle-right"></i>Calculate daily calorie</a>
+              </li>
+              <li>
+                <a href="Calorieshistory.html"><i class="ti-angle-right"></i>View calories history</a>
+              </li>
+              <li>
+                <a href="selectexercise.html"><i class="ti-angle-right"></i>View amount of exercise</a>
+              </li>
+              <li>
+                <a href="calculateBMI.html"><i class="ti-angle-right"></i>Calculate BMI</a>
+              </li>
+              <li>
+                <a href="BMI_history.html"><i class="ti-angle-right"></i>BMI Record</a>
+              </li>
+          <li>
+            <a href="app-profile.html">
+              <i class="ti-user"></i> Profile</a>
+          </li>
+          <li class="label">Features</li>
+          <li>
+            <a href="page-reset-password_f.html">
+              <i class="ti-target"></i> Reset password
+            </a>
+          </li>
+          <li>
+            <a  onclick="logout()">
+              <i class="ti-close"></i> Logout</a>
+          </li>
+        </ul></div></div></div>
+  <!-- /# sidebar -->
+  <div class="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="float-left">
+            <div class="hamburger sidebar-toggle">
+              <span class="line"></span>
+              <span class="line"></span>
+              <span class="line"></span>
+            </div>
+          </div>
+          <div class="float-right">
+              <div class="header-icon">
+                <a href="app-profile.html">
+                <span class="user-avatar" id="avatarname">
+                  <i class="ti-angle-down f-s-10"></i></a>
+                </span>
+              </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="content-wrap">
+    <div class="card nestable-cart">
+        <!-- /# row -->
+        <section id="main-content">
+         
+                <h2 style="margin-left:30px;color:black">Calories History</h2>
+
+                <div class="container nt-3">
+                  <table class="table">
+                      <thead>               
+                          <th>No</th>
+                          <th>Date and Time</th>             
+                          <th style="text-align: center;">Calories Consume (cal)</th>
+                          <th style="text-align: center;">Delete</th>   
+                      </thead>
+                      <tbody id="tbody1"></tbody>
+                  </table>
+                  </div>
+        </section>
+      </div>
+    </div>
+
+    <!-- Common -->
+    <script src="assets/js/lib/jquery.min.js"></script>
+    <script src="assets/js/lib/jquery.nanoscroller.min.js"></script>
+    <script src="assets/js/lib/menubar/sidebar.js"></script>
+    <script src="assets/js/lib/preloader/pace.min.js"></script>
+    <script src="assets/js/scripts.js"></script>
+
+    <script type="module">
+
+class cal{
+    constructor(totalc,date,no){
+    
+    this.totalc=totalc;
+    this.date=date;
+    this.no=no;
+    }
+    }
+
+      //filling the table
+      var ucNo = 0;
+      var tbody = document.getElementById('tbody1');
+      
+      var Totalcal;
+      var Createcal;
+      var calno;
+
+
+      function AddItemToTable(calno,time, calories){
+        let tr = document.createElement("tr");
+        let td1 = document.createElement('td');
+        let td2 = document.createElement('td');
+        let td3 = document.createElement('td');
+
+        td1.style.color="black";
+        td2.style.color="black";
+        td3.style.color="black";
+        td3.style.textAlign="center";
+        var times=time.toDate().toDateString()+" at "+time.toDate().toLocaleTimeString();
+        td1.innerHTML= ++ucNo;
+        td2.innerHTML= times;
+        td3.innerHTML= calories;
+
+
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        var key=calno;
+        var ControlDiv = document.createElement("button");
+        ControlDiv.style.margin="10px";
+        ControlDiv.innerHTML="Delete";
+        ControlDiv.onclick=function(){replace(key)};
+        tr.appendChild(ControlDiv);
+        tbody.appendChild(tr);
+      }
+
+      function AddAllItemsToTable(TheUsercalories){
+        ucNo=0;
+        tbody.innerHTML="";
+        TheUsercalories.forEach(element => {
+          AddItemToTable(element.CalNo,element.createdAt, element.Totalcalorie);
+        });
+      }
+
+       // Import the functions you need from the SDKs you need
+       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
+
+      // Initialize Firebase
+      const app = initializeApp(connect());
+
+      import {getFirestore,setDoc, doc, getDoc, getDocs, onSnapshot, collection,serverTimestamp, Timestamp, deleteDoc, deleteField}
+      from "https://www.gstatic.com/firebasejs/9.5.0/firebase-firestore.js"; 
+
+      const db = getFirestore();
+      if(localStorage.getItem("calorieusername"))
+    { var currenttime=new Date().getTime();
+      var checkexpire=JSON.parse(localStorage.getItem("calorieusername"));
+      if(currenttime-checkexpire.time>=checkexpire.expire)
+      {
+        alert("session timeout");
+        localStorage.removeItem("calorieusername");
+        window.location.href="page-login_f.html";
+      }
+    }
+    else{
+      window.location.href="page-login_f.html";
+    }
+
+        var username=JSON.parse(localStorage.getItem("calorieusername")).value;
+        document.getElementById("avatarname").innerHTML=username;
+        
+      //getting all data
+      
+      async function GetAllDataOnce(){
+        
+
+        var userc = [];
+        xhr.open('GET','https://localhost/Healthy_diet/service/getCalorieHistory.php/'+username,true);
+        xhr.send();
+        xhr.onload = function(){
+          caloriearray=JSON.parse(xhr.responseText);
+      console.log(caloriearray);
+      caloriearray.forEach(
+          userc.push(caloriearray)
+      )
+
+        AddAllItemsToTable(userc);
+      }
+    }
+
+      //delete data
+      async function replace(calnum){
+        //var text=document.getElementById("deleting");
+        //text.innerHTML="Deleting data, please wait";
+        var calarray=new Array(cal);
+        var count=calnum;
+        var totalcal;
+        var createdcal;
+        xhr1.open('GET','https://localhost/Healthy_diet/service/getCalorieHistory.php/'+username,true);
+        xhr1.send();
+        xhr1.onload = function(){
+          getcal=JSON.parse(xhr.responseText);
+        getcal.forEach(
+   num=>{
+        if(parseInt(num.data().CalNo) > parseInt(calnum))
+        { 
+          calno=(num.data().CalNo-1);
+          totalcal=num.data().Totalcalorie;
+          createdcal=num.data().createdAt;
+          calarray.push(new cal(totalcal,createdcal,calno));
+          count++;
+        }
+        });
+      }
+        for(var index=1;index<calarray.length;index++)
+      {     
+
+            
+            const xhr2 = new XMLHttpRequest();
+            xhr2.open('PUT','https://localhost/Healthy_diet/service/getCalorieHistory.php/'+username+'/'+(calarray[index].no).toString()+'/'+(parseFloat(calarray[index].totalc)).toFixed(2)+'/'+calarray[index].date,true);
+            xhr2.send();
+            xhr2.onerror= function(error){
+          alert( error );
+        }
+        }
+        
+        const xhr3 = new XMLHttpRequest();
+        xhr3.open('DELETE','https://localhost/Healthy_diet/service/getCalorieHistory.php/'+username+'/'+count,true);
+        xhr3.send();
+        xhr3.onload = function(){
+          window.location.href="foodtable.html";
+        }
+        xhr3.onerror= function(error){
+          alert( error );
+        }
+      }
+
+      
+      window.onload = GetAllDataOnce;
+
+
+    </script>
+
+
+</body>
+
+</html>
