@@ -136,9 +136,6 @@
 
         var username=JSON.parse(localStorage.getItem("calorieusername")).value;
         
-<<<<<<< HEAD
-      const getfood= await getDocs(collection(db,"users", username,"FoodTable"));
-=======
         const xhr = new XMLHttpRequest();
         xhr.open('GET','https://localhost/Healthy_diet/service/setcustomfood.php/'+username,true);
         xhr.send();
@@ -153,7 +150,7 @@
         }
       console.log(foodnum);
         }
->>>>>>> mlb
+        
         document.getElementById("avatarname").innerHTML=username;
 
         var foodname=localStorage.getItem("foodname");
@@ -266,24 +263,6 @@ var tr=table.insertRow();
         {
           var text=document.getElementById("Adding");
         text.innerHTML="Adding data, please wait";
-<<<<<<< HEAD
-          var foodnum=0;
-        getfood.forEach(doc=>{foodnum+=1});
-          setDoc(doc(db,"users", username,"FoodTable",(foodnum+=1).toString()),{
-            TableNo:foodnum,
-            NameOfFood:foodname,
-            CPG:foodcpg,
-            gram:gram,
-            cm:cookm,
-            totalcalorie:totalc.toFixed(2),
-            })
-            .then(()=>{
-                window.location.href="foodtable.html";
-            })
-            .catch((error)=>{
-                alert("error "+error);
-            });
-=======
         const xhr2 = new XMLHttpRequest();
         xhr2.open('POST','https://localhost/Healthy_diet/service/setfood.php/'+username+'/'+foodnum+'/'+foodname+'/'+foodcpg+'/'+gram+'/'+cookm+'/'+totalc.toFixed(2),true);
         xhr2.send();
@@ -294,7 +273,6 @@ var tr=table.insertRow();
         xhr2.onerror= function(error){
           alert( error );
         }
->>>>>>> mlb
         
         }
         else {
