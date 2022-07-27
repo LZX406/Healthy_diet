@@ -136,6 +136,7 @@
 
         var username=JSON.parse(localStorage.getItem("calorieusername")).value;
         
+        var foodnum
         const xhr = new XMLHttpRequest();
         xhr.open('GET','https://localhost/Healthy_diet/service/setcustomfood.php/'+username,true);
         xhr.send();
@@ -274,6 +275,7 @@ var tr=table.insertRow();
           alert( error );
         }
         
+      
         }
         else {
           alert("gram value must enter");
