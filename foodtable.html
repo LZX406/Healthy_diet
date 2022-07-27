@@ -363,7 +363,6 @@
       document.getElementById("creating").innerHTML="No food has been added."
     }
     else{
-    var foodtables=await collection(db,"users", username,'FoodTable');
     if(confirm("Delete all the food in the list?"))
     {
       const xhr4 = new XMLHttpRequest();
