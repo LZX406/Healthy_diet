@@ -7,7 +7,7 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 require '../vendor/autoload.php';
 require_once 'GFirestore.php';
-phpinfo();
+
 $app = new \Slim\App;
 
 $app->get('/{user}/caloriehistory', function (Request $request, Response $response, array $args) {
@@ -15,10 +15,11 @@ $app->get('/{user}/caloriehistory', function (Request $request, Response $respon
     $fs=new Firestore( collection: 'users');
     
 try{
-    $filenum=0;
+    $filenum=[];
 $array=$fs->getusercaloriehistory($user);
-foreach($array as $data){
-    $filenum+=1;
+foreach($array as $data){   
+    
+    array_push($filenum,$data->data());
 }
 echo json_encode($filenum);
 }catch(PDOException $e){
@@ -32,10 +33,10 @@ $app->get('/{user}/record', function (Request $request, Response $response, arra
     $fs=new Firestore( collection: 'users');
     
 try{
-    $filenum=0;
+    $filenum=[];
 $array=$fs->getuserrecord($user);
 foreach($array as $data){
-    $filenum+=1;
+    array_push($filenum,$data->data());
 }
 echo json_encode($filenum);
 }catch(PDOException $e){
@@ -44,7 +45,24 @@ echo json_encode($filenum);
 }    
 });
 
-
+$app->get('/{loc}/exercises', function (Request $request, Response $response, array $args) {
+    //$user=$args['user'];
+    $loc=$args['loc'];
+    $fs=new Firestore( collection: 'users');
+    
+try{
+    $filenum=[];
+$array=$fs->getexercises($loc);
+foreach($array as $data){   
+    
+    array_push($filenum,$data->data());
+}
+echo json_encode($filenum);
+}catch(PDOException $e){
+    $data=array("statues"=>"fail");
+    echo json_endode($data);
+}    
+});
 $app->run();
 
 ?>

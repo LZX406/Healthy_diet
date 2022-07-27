@@ -7,6 +7,7 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 require '../vendor/autoload.php';
 require_once 'GFirestore.php';
+
 $app = new \Slim\App;
 
 $app->get('/login/{user}', function (Request $request, Response $response, array $args) {
@@ -24,6 +25,9 @@ echo json_encode($filenum);
     echo json_endode($data);
 }    
 });
+
+    
+
 $app->run();
 
 ?>

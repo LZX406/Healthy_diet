@@ -19,10 +19,15 @@ $app->get('/{user}', function (Request $request, Response $response, array $args
     $fs=new Firestore( collection: 'users');
     
 try{
-    $filenum=0;
+    $filenum=[];
 $array=$fs->getusercaloriehistory($user);
-foreach($array as $data){
-    $filenum+=1;
+
+foreach($array as $key=>$data){
+    // print_r($data->data());
+    array_push($filenum,$data->data());
+    $date = strval($filenum[$key]['createdAt']);
+    $filenum[$key]['createdAt']=$date;
+    // print($filenum[$key]['createdAt']);
 }
 echo json_encode($filenum);
 }catch(PDOException $e){
@@ -32,22 +37,31 @@ echo json_encode($filenum);
 });
 
 
-$app->put('/{user}/{no}/{totalc}/{date}', function (Request $request, Response $response, array $args) {
+$app->put('/{user}/{no}', function (Request $request, Response $response, array $args) {
     $user=$args['user'];
     $no=$args['no'];
-    $totalc=$args['totalc'];
-    $date=$args['date'];
-    
+    $file=[];
+    $dataarray=[];
     $fs=new Firestore( collection: 'users');
-    $data=[
-        
-        'Totalcalorie'=>$totalc,
-        'Calno'=>(int)$foodnum,
-        'createdAt'=>$date,
-       
+    $array=$fs->getusercaloriehistory($user);
+
+foreach($array as $key=>$data){
+  
+
+
+   array_push($file,$data->data());
+   if($file[$key]['CalNo'] == $no)
+   {
+    $dataarray=[
+        'CalNo'=> ($no-1),
+        'Totalcalorie'=>$file[$key]['Totalcalorie'],
+        'createdAt'=>$$file[$key]['createdAt']
     ];
+   }
+}
 try{
-$array=$fs->updateusercalorietable($user,$no,$data);
+$array=$fs->updateusercalorietable($user,$no,$dataarray);
+
 }catch(PDOException $e){
     $data=array("statues"=>"fail");
     echo json_endode($data);
@@ -57,7 +71,7 @@ $array=$fs->updateusercalorietable($user,$no,$data);
 
 $app->delete('/{user}/{no}', function (Request $request, Response $response, array $args) {
     $user=$args['user'];
-    $no=$args['foodnum'];
+    $no=$args['no'];
     $fs=new Firestore( collection: 'users');
     
 try{
