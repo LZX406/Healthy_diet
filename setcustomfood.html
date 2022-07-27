@@ -137,9 +137,6 @@
 
         document.getElementById("avatarname").innerHTML=username;
 
-<<<<<<< HEAD
-        const getfood= await getDocs(collection(db,"users", username,"FoodTable"));
-=======
         const xhr = new XMLHttpRequest();
           xhr.open('GET','https://localhost/Healthy_diet/service/setcustomfood.php/'+username,true);
           xhr.send();
@@ -153,7 +150,6 @@
           foodnum=1;
         }
           }
->>>>>>> mlb
     
         var table=document.getElementById("table");
         table.border="3px; solid black";
@@ -266,25 +262,6 @@ var tr=table.insertRow();
         var cookvalue=cmethod.options[cmethod.selectedIndex].value;
         var totalc=foodcpg*gram*cookvalue;
         if(gram)
-<<<<<<< HEAD
-        {var foodnum=0;
-        getfood.forEach(doc=>{foodnum+=1});
-          setDoc(doc(db,"users", username,"FoodTable",(foodnum+=1).toString()),{
-            TableNo:foodnum,
-            NameOfFood:foodname,
-            CPG:foodcpg,
-            gram:gram,
-            cm:cookm,
-            totalcalorie:totalc.toFixed(2)
-            })
-            .then(()=>{
-                window.location.href="foodtable.html";
-            })
-            .catch((error)=>{
-                alert("error "+error);
-            });
-        
-=======
         {
           
         const xhr2 = new XMLHttpRequest();
@@ -298,7 +275,6 @@ var tr=table.insertRow();
           alert( error );
         }
           
->>>>>>> mlb
         }
         else {
           alert("gram value must enter");
