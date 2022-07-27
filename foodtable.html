@@ -336,8 +336,10 @@
           xhr2.open('GET','https://localhost/Healthy_diet/service/foodtable.php/'+username,true);
           xhr2.send();
           xhr2.onload = function(){
-        //console.log(xhr3.responseText);
-        foodnum=JSON.parse(xhr2.responseText);
+        //console.log(xhr2.responseText);
+        if(xhr2.responseText!=null){
+        foodnum=parseInt(JSON.parse(xhr2.responseText));
+        }
         foodnum+=1;
         console.log(foodnum);
           const xhr3 = new XMLHttpRequest();

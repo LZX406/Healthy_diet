@@ -61,7 +61,7 @@ class Firestore
     public function getuserrecord(string $name)
     {
         
-        return $this->db->collection($this->name)->document($name)->collection('record')->documents();  
+        return $this->db->collection($this->name)->document($name)->collection('UserdailyCalorie')->documents();  
     }
     public function getname()
     {
@@ -133,5 +133,9 @@ class Firestore
         
         return $this->db->collection($this->name)->documents();  
     }
-    
+    public function getexercises(string $loc)
+    {
+        
+        return $this->db->collection('location')->document($loc)->collection('exercises')->documents();  
+    }
 }

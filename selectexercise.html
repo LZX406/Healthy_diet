@@ -234,25 +234,22 @@
 
             var username2 = JSON.parse(localStorage.getItem("calorieusername")).value;
 
-            let today = Timestamp.fromDate(pretoday);
+            // let today = Timestamp.fromDate(pretoday);
 
             // var histref = collection(db, "users", username2, "Calorierecord");
-            var calories = [];
+            var calories;
+            var caloriearray=[];
             var xhr=new XMLHttpRequest();
             xhr.open('GET','https://localhost/Healthy_diet/service/SelectExercise.php/'+username+'/caloriehistory',true);
             xhr.send();
             xhr.onload = function(){
             caloriearray=JSON.parse(xhr.responseText);
-              for( i=0;i<caloriearray.length;i++)
-              {
-                if(caloriearray.createdAt > today)
-                {
-                  calories.push(doc.data().Totalcalorie);
-                }
-              }
               
-            }
-
+               calories=caloriearray[caloriearray.length-1].Totalcalorie;
+              console.log("calories = "+calories);
+            
+            console.log("calories outside = "+calories);
+            // console.log("calories = "+calories);
             // const q = query(histref, where("createdAt", ">", today));
 
             
@@ -268,17 +265,20 @@
             //     });
             var ucalorie;
             var xhr2=new XMLHttpRequest();
+            var record;
             xhr2.open('GET','https://localhost/Healthy_diet/service/SelectExercise.php/'+username+'/record',true);
             xhr2.send();
             xhr2.onload = function(){
-            record=JSON.parse(xhr.responseText);
-            if (record.exists()){
-                  ucalorie = docSnap.data().UserDailyCalorie;
+            record=JSON.parse(xhr2.responseText);
+            if (record!=null){
+                  ucalorie = record[0].UserDailyCalorie;
+                  console.log("ucalcorie:"+ucalorie);
                 } else {
                   console.log("No such document!");
                 }
               
-            }
+            
+            console.log("ucalcorie outside :"+ucalorie);
             // var ucref = doc(db, "users", username2, "UserdailyCalorie", "record");
             // // const r = query(ucref);
             //     const docSnap = await getDoc(r);
@@ -290,13 +290,14 @@
                 
                 AddCalories(calories, ucalorie);
                 Caloriebox.value = ucalorie;
-
+              
                 if (Namebox.value < 0 ){
                   Namebox.value = 0;
                   document.getElementById("viewBtn").hidden = true;
                 }
 
-
+              }
+            }
                 // Namebox.value = docSnap.data().totalcalorie;
         }
 
@@ -407,18 +408,29 @@
             }
 
             let loc = Locbox.value;
-            const dbRef = await collection(db, "location", loc, "exercises");
+            
+            // const dbRef = await collection(db, "location", loc, "exercises");
 
-            onSnapshot(dbRef, orderBy("cpm"), (querySnapshot)=>{
-                var exercises = [];
+            // onSnapshot(dbRef, orderBy("cpm"), (querySnapshot)=>{
+            //     var exercises = [];
 
-                querySnapshot.forEach(doc => {
-                    exercises.push(doc.data());
-                });
+            //     querySnapshot.forEach(doc => {
+            //         exercises.push(doc.data());
+            //     });
 
-                AddAllItemsToTable(exercises);
-            })
-          } else {
+            //     AddAllItemsToTable(exercises);
+            // })
+            var xhr3=new XMLHttpRequest();
+            var exercises=[];
+            xhr3.open('GET','https://localhost/Healthy_diet/service/SelectExercise.php/'+loc+'/exercises',true);
+            xhr3.send();
+            xhr3.onload = function(){
+              exercises=JSON.parse(xhr3.responseText);
+            
+              AddAllItemsToTable(exercises);
+            }
+          } 
+          else{
 
             
             document.getElementById("viewBtn").disabled = true;
@@ -428,20 +440,14 @@
 //---------------------------Calc Total Calorie for the Day-------------------//
 function AddCalories(calories, ucalorie){
             // tbody.innerHTML="";
-            var totcal = 0;
+            var totcal = calories;
+            console.log("total cal = " + calories);
+            
 
-            var calories2 = [];
-
-            var calories2 = calories.map(Number);
-
-            for( var i = 0; i<calories2.length; i++){
-                totcal += calories2[i];
-            }
-
-            var caldif = totcal.toFixed(2) - ucalorie;
-
+            var caldif = totcal - ucalorie;
+            console.log("caldif = "+caldif);
             Namebox.value = caldif.toFixed(2);
-
+            console.log(Namebox.value);
         }
 
 

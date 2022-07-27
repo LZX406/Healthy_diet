@@ -52,11 +52,12 @@ $app->get('/{user}', function (Request $request, Response $response, array $args
     
 try{
     $filenum=0;
+    $filearray=[];
 $array=$fs->getuserfoodcalorierecord($user);
 foreach($array as $data){
     $filenum+=1;
 }
-echo json_encode($filenum);
+echo json_encode(strval($filenum));
 }catch(PDOException $e){
     $data=array("statues"=>"fail");
     echo json_endode($data);
